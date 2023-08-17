@@ -187,7 +187,7 @@ class HeaderLinkBlock(StructBlock):
 class HomePageBlock(StreamBlock):
     heading = SliderBlock(
         template = "home/blocks/slider_block.html",
-        label = "Header"
+        label = "Header",
         min_num=3,
         max_num=3,
     )

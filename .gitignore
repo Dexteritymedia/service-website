@@ -26,10 +26,8 @@ wheels/
 
 /newsletter/
 media
-static
 db.sqlite3
 __pycache__
-/static/
 *.sqlite3
 whole.json
 

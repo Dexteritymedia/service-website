@@ -1,7 +1,7 @@
 from wagtail import hooks
 from wagtail.contrib.modeladmin.options import ModelAdmin, ModelAdminGroup, modeladmin_register
 
-from .models import HomePage, Service, ServicePage, StaticPage
+from .models import HomePage, Service, ServicePage, StaticPage, FormPage
 
 #to change the name "Snippets" to Overview in wagtail admin sidebar
 @hooks.register('construct_main_menu')
@@ -37,6 +37,14 @@ class ServicePageAdmin(ModelAdmin):
     add_to_settings_menu = False
     exclude_from_explorer = False
 
+class FormPageAdmin(ModelAdmin):
+    model = FormPage
+    menu_label = 'Testimonial & Contact'
+    menu_icon = 'list-ul'
+    menu_order = 150
+    add_to_settings_menu = False
+    exclude_from_explorer = False
+
 class ServiceDetailPageAdmin(ModelAdmin):
     model = ServicePage
     menu_label = 'Products & Services'
@@ -57,6 +65,7 @@ class StaticPageAdmin(ModelAdmin):
     search_fields = ('title', 'body', 'latest_revision_created_at')
 
 modeladmin_register(HomePageAdmin)
-modeladmin_register(ServicePageAdmin)  
+modeladmin_register(ServicePageAdmin)
+modeladmin_register(FormPageAdmin)
 modeladmin_register(ServiceDetailPageAdmin)
 modeladmin_register(StaticPageAdmin)

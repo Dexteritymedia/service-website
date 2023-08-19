@@ -1,0 +1,28 @@
+{% extends "main.html" %}
+
+{% load static wagtailimages_tags wagtailcore_tags %}
+
+{% block content %}
+
+<div class="container">
+<div class="row">
+<div class="col mt-3 mb-5">
+<br/>
+<h1>{{ page.title|title }}</h1>
+{% if page.intro %}
+<p> {{ page.intro|richtext }}
+{% endif %}
+
+<form action="{% pageurl page %}" method="POST">
+{% csrf_token %}
+{{ form }}
+
+<p></p>
+<button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+</div>
+</div>
+</div>
+
+{% endblock %}

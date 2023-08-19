@@ -104,3 +104,4 @@ class SiteSettings(BaseSiteSetting):
 
     class Meta:
         verbose_name = 'Site Setting'
+        verbose_name_plural = 'Site Settings'

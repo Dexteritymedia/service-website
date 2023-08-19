@@ -25,6 +25,10 @@ class HomePage(Page):
     content_panels = Page.content_panels + [
         FieldPanel('content'),
     ]
+
+    class Meta:
+        verbose_name = 'Home'
+        verbose_name_plural = 'Home'
     
 
 class Service(Page):
@@ -80,10 +84,10 @@ class ServicePage(Page):
 
     template = 'service_details.html'
     parent_page_types = [
-        'HomePage'
+        'Service'
         ]
 
-    service_title = models.CharField(max_length=100, null=True, blank=True)
+    service_title = models.CharField(max_length=100, null=True, blank=False)
     description = models.TextField(null=True, blank=False) 
 
     images = StreamField(
@@ -96,6 +100,8 @@ class ServicePage(Page):
         null=True
 
     )
+
+    show_in_menus_default = True
     
 
     content_panels = Page.content_panels + [
@@ -151,9 +157,12 @@ class FormPage(AbstractEmailForm):
         #app_name.model,
         'home.FormPage',
     ]
+    parent_page_types = [
+        'HomePage'
+        ]
 
 
-    max_count = 3
+    max_count = 2
     
     intro = RichTextField(blank=True)
     thank_you_text = RichTextField(blank=True)
@@ -161,7 +170,7 @@ class FormPage(AbstractEmailForm):
 
     def get_template(self, request, *args, **kwargs):
         if self.use_other_template:
-            return 'subscribe_page.html'
+            return 'testimonial_page.html'
         return 'contact_page.html'
 
 
@@ -170,13 +179,6 @@ class FormPage(AbstractEmailForm):
         InlinePanel('form_fields', label='Form Fields'),
         FieldPanel('intro', classname='full'),
         FieldPanel('thank_you_text', classname='full'),
-        MultiFieldPanel([
-            FieldRowPanel([
-                FieldPanel('from_address', classname='col6'),
-                FieldPanel('to_address', classname='col6'),
-            ]),
-            FieldPanel('subject'),
-        ], heading='Email Settings'),
     ]
 
 

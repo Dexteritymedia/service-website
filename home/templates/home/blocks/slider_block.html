@@ -1,4 +1,4 @@
-{% load wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags %}
 
 <div class="container-fluid p-0 pb-5">
         <div class="owl-carousel header-carousel position-relative">
@@ -10,9 +10,8 @@
                     <div class="container">
                         <div class="row justify-content-center">
                             <div class="col-12 col-lg-8 text-center">
-                                <h5 class="text-white text-uppercase mb-3 animated slideInDown">{{ slide.title }}</h5>
-                                <h1 class="display-3 text-white animated slideInDown mb-4">{{ slide.body }}</h1>
-                                <p class="fs-5 fw-medium text-white mb-4 pb-2">Vero elitr justo clita lorem. Ipsum dolor at sed stet sit diam no. Kasd rebum ipsum et diam justo clita et kasd rebum sea elitr.</p>
+                                <h1 class="display-3 text-white animated slideInDown mb-4">{{ slide.title }}</h1>
+                                <p class="fs-5 fw-medium text-white mb-4 pb-2">{{ slide.body }}</p>
                                 <a href="{{ slide.button_page }}" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">Read More</a>
                                 <a href="" class="btn btn-light py-md-3 px-md-5 animated slideInRight">Free Quote</a>
                             </div>

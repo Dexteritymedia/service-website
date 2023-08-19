@@ -2,18 +2,19 @@
 
 {% if menu_items %}
 <div class="collapse navbar-collapse" id="navbarCollapse">
-            <div class="navbar-nav ms-auto p-4 p-lg-0">
-			{% for item in menu_items %}
-                <a href="{{ item.href }}" class="nav-item nav-link {% if request.path %} active {% endif %}">{{ item.text|title }}</a>
-				{% if item.sub_menu %} 
-					<div class="dropdown-menu fade-up m-0">
-						{% for sub_item in item.sub_menu.items %}
+    <div class="navbar-nav ms-auto p-4 p-lg-0">
+	{% for item in menu_items %}
+        <a href="{{ item.href }}" class="nav-item nav-link {% if request.path == url %} active {% endif %}">{{ item.text|title }}</a>
+		{{ sub_menu }}
+			{% if item.sub_menu %} 
+				<div class="dropdown-menu fade-up m-0">
+					{% for sub_item in item.sub_menu.items %}
 						 <a href="{{ sub_item.href }}" class="dropdown-item {{ sub_item.active_class }}">{{ sub_menu.text }}</a>
-						 {% endfor %}
-					</div>
-				{% endif %}
-            </div>
-			{% endfor %}
-            <a href="" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Get A Quote<i class="fa fa-arrow-right ms-3"></i></a>
-        </div>
+					{% endfor %}
+				</div>
+			{% endif %}
+ 
+	{% endfor %}
+    <a href="" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Get A Quote<i class="fa fa-arrow-right ms-3"></i></a>
+</div>
 {% endif %}

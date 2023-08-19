@@ -44,6 +44,11 @@
 	<!-- Other links -->
 	{{ settings.site_settings.SiteSettings.links }}
 	
+	{% if settings.site_settings.SiteSettings.site_logo %}
+		{% image settings.site_settings.SiteSettings.site_logo max-30x30 as icon_image %}
+		<link rel="shortcut icon" href="{{ icon_image.url }}" />
+	{% endif %}
+	
 </head>
 
 <body>

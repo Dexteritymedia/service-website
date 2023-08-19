@@ -58,7 +58,8 @@ class SliderBlock(StructBlock):
 
     class Meta:
         icon = "list-ul"
-        max_num = 1
+        min_num=3
+        max_num=3
 
 
 class AboutUsBlock(StructBlock):
@@ -89,7 +90,29 @@ class AboutUsBlock(StructBlock):
     
     class Meta:
         icon = 'form'
-        
+
+
+class AttributeBlock(StructBlock):
+
+    attributes = ListBlock(
+        StructBlock(
+            [
+                ('text', CharBlock(required=False, max_length=40)),
+                ('icon', ChoiceBlock(choices=[
+                    ('', 'Select an icon'),
+                    ('i2', 'Headphones'),
+                    ('i3', 'Check'),
+                    ('i4', 'Compass'),
+                    ('i5', 'Person'),
+                    ('i6', 'Arrow-right')
+                ], blank=True, required=False)
+                ),
+            ]
+        )
+    )
+
+    class Meta:
+        icon = 'form'
 
 
 class ServiceBlock(StructBlock):
@@ -182,12 +205,13 @@ class HeaderLinkBlock(StructBlock):
     class Meta:
         label = "Link"
         icon = "link"
+        template = "home/blocks/header_link_block.html"
 
 
 class HomePageBlock(StreamBlock):
     heading = SliderBlock(
         template = "home/blocks/slider_block.html",
-        label = "Header",
+        label = "Slides",
         min_num=3,
         max_num=3,
     )
@@ -197,11 +221,15 @@ class HomePageBlock(StreamBlock):
     )
     project =  ProjectBlock(
         template = "home/blocks/project_block.html",
-        label = "Project"
+        label = "Projects"
     )
     about_us  = AboutUsBlock(
         template = "home/blocks/about_block.html",
         label = "About us"
+    )
+    attribute  = AttributeBlock(
+        template = "home/blocks/attribute_block.html",
+        label = "Attributes"
     )
     services = ServiceBlock(
         template = "home/blocks/service_block.html",

@@ -1,0 +1,18 @@
+{% extends "main.html" %}
+
+{% load static wagtailimages_tags wagtailcore_tags %}
+
+{% block content %}
+
+<div class="container">
+<div class="row">
+<div class="col mt-5">
+
+
+<h2>{{ page.thank_you_text|richtext }}</h2>
+
+</div>
+</div>
+</div>
+
+{% endblock %}

@@ -29,6 +29,13 @@ class HomePage(Page):
     class Meta:
         verbose_name = 'Home'
         verbose_name_plural = 'Home'
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        services = ServicePage.objects.live().public().exclude(id=self.id).order_by('-first_published_at')[:6]
+
+        context['services'] = services
+        return context
     
 
 class Service(Page):
@@ -47,6 +54,16 @@ class Service(Page):
     )
     body = StreamField(StoryBlock(), use_json_field=True, blank=True, null=True)
 
+    """
+    image = models.ForeignKey(
+        "wagtailimages.Image",
+        blank=False,
+        null=True,
+        related_name="+",
+        on_delete=models.SET_NULL,
+        )
+    """
+    
     search_fields = Page.search_fields + [
         index.SearchField("body"),
     ]
@@ -88,7 +105,8 @@ class ServicePage(Page):
         ]
 
     service_title = models.CharField(max_length=100, null=True, blank=False)
-    description = models.TextField(null=True, blank=False) 
+    description = models.TextField(null=True, blank=False)
+    other_services_title = models.CharField(max_length=100, default='Services We also Offer')
 
     images = StreamField(
         [
@@ -110,10 +128,22 @@ class ServicePage(Page):
         FieldPanel('images'),
     ]
 
+    promote_panels = Page.promote_panels + [
+        FieldPanel('other_services_title'),
+    ]
+
 
     class Meta:
         verbose_name = 'Service detail'
         verbose_name_plural = 'Service details'
+
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        services = ServicePage.objects.live().public().exclude(id=self.id).order_by('-first_published_at')[:4]
+
+        context['services'] = services
+        return context
 
 
 class StaticPage(Page):
@@ -145,6 +175,15 @@ class StaticPage(Page):
     class Meta:
         verbose_name = 'Other Page'
         verbose_name_plural = 'Other Pages'
+
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        services = ServicePage.objects.live().public().exclude(id=self.id).order_by('-first_published_at')[:4]
+
+        context['services'] = services
+        return context
+    
 
 class FormField(AbstractFormField):
     page = ParentalKey('FormPage', related_name='form_fields', on_delete=models.CASCADE)

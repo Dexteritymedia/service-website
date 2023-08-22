@@ -18,9 +18,9 @@
 							<img class="img-fluid" src="" alt="">
 							{% endif %}
                             <div class="team-social">
-                                <a class="btn btn-square" href=""><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-square" href=""><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-square" href=""><i class="fab fa-instagram"></i></a>
+                                {% if team.facebook_handle %}<a class="btn btn-square" href="{{ team.facebook_handle }}"><i class="fab fa-facebook-f"></i></a>{% endif %}
+                                {% if team.twitter_handle %}<a class="btn btn-square" href="{{ team.twitter_handle }}"><i class="fab fa-twitter"></i></a>{% endif %}
+                                {% if team.instagram_handle %}<a class="btn btn-square" href="{{ team.instagram_handle }}"><i class="fab fa-instagram"></i></a>{% endif %}
                             </div>
                         </div>
                         <div class="text-center border border-5 border-light border-top-0 p-4">

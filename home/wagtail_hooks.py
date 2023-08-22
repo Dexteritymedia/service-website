@@ -14,6 +14,10 @@ def change_page_name(request, menu_items):
 def hide_main_menu_menu_item(request, menu_items):
     menu_items[:] = [item for item in menu_items if item.name != "main-menu"]
 
+@hooks.register("construct_settings_menu")
+def hide_help_menu_item(request, menu_items):
+    menu_items[:] = [item for item in menu_items if item.name != "help"]
+
 #to change the name "Pages" to Overview in wagtail admin sidebar
 @hooks.register('construct_main_menu')
 def change_page_name(request, menu_items):

@@ -48,9 +48,10 @@ class SliderBlock(StructBlock):
                 ('image', ImageChooserBlock(required=False)),
                 ('title', CharBlock(required=False, max_length=40)),
                 ('body', RichTextBlock(required=True, features=['h1','h2','h3','h4','h5','h6','hr','bold','italic','link'],)),
-                ('color', CharBlock(required=False, max_length=40, help_text="Enter a hexdecimal color for the background e.g #000000")),
                 ('button_page', PageChooserBlock(required=False)),
+                ('button_page_text', CharBlock(required=False, default='Read More', max_length=40)),
                 ('button_url', URLBlock(required=False, help_text='If the button page above is selected, that will be used first')),
+                ('button_url_text', CharBlock(required=False, default='Learn More', max_length=40)),
             ]
         )
     )
@@ -68,22 +69,15 @@ class AboutUsBlock(StructBlock):
     attribution data
     """
     image = ImageChooserBlock(required=True)
-    title = CharBlock(required=False)
+    title = CharBlock(required=False, default='About Us',)
     description = TextBlock(required=False)
-    link = PageChooserBlock(required=False)
+    link = PageChooserBlock(required=False, target_model=['home.StaticPage'])
+    link_text = CharBlock(default='Explore More')
     benefits = ListBlock(
         StructBlock(
             [
-                ('icon', ChoiceBlock(choices=[
-                    ('', 'Select an icon'),
-                    ('i2', 'Headset'),
-                    ('i3', 'Check'),
-                    ('i4', 'Compass'),
-                    ('i5', 'Person'),
-                    ('i6', 'Group')
-                ], blank=True, required=False)
-                ),
                 ('description', CharBlock(required=False, max_length=40)),
+                ('completed_projects', CharBlock(required=False, help_text="Enter a Number", max_length=40)),
             ]
         )
     )
@@ -120,7 +114,7 @@ class ServiceBlock(StructBlock):
     Custom `StructBlock` for utilizing images with associated caption and
     attribution data
     """
-    heading = CharBlock(required=False)
+    heading = CharBlock(default='Our Services', required=False)
     
     services = ListBlock(
         StructBlock(
@@ -129,6 +123,7 @@ class ServiceBlock(StructBlock):
                 ('title', CharBlock(required=False, max_length=40)),
                 ('description', TextBlock(required=False)),
                 ('link', PageChooserBlock(required=False, target_model=['home.ServicePage'])),
+                ('button_text', CharBlock(required=False, default='Read More', max_length=40)),
             ]
         )
     )
@@ -147,8 +142,8 @@ class TeamBlock(StructBlock):
         StructBlock(
             [
                 ('image', ImageChooserBlock(required=False)),
-                ('full_name', CharBlock(required=True, max_length=40)),
-                ('position', CharBlock(required=False, max_length=40)),
+                ('full_name', CharBlock(required=True, default='Opabiyi Samson', help_text="Add your team member full name", max_length=40)),
+                ('position', CharBlock(required=False, default='Manager', help_text="Add your team member position", max_length=40)),
                 ('facebook_handle', URLBlock(required=False, default='', help_text="Add your Facebook Username", max_length=40)),
                 ('instagram_handle', URLBlock(required=False, default='', help_text="Add your Instagram Handle", max_length=40)),
                 ('twitter_handle', URLBlock(required=False, default='', help_text="Add your Twitter Handle", max_length=40)),
@@ -161,14 +156,12 @@ class TeamBlock(StructBlock):
       
 
 class ProjectBlock(StructBlock):
-    heading = CharBlock(required=False)
+    heading = CharBlock(required=False, default='Our Projects/Portfolios')
     
     projects = ListBlock(
         StructBlock(
             [
                 ('image', ImageChooserBlock(required=False)),
-                ('title', CharBlock(required=False, max_length=40)),
-                ('description', TextBlock(required=False)),
                 ('link', PageChooserBlock(required=False)),
             ]
         )
@@ -183,13 +176,12 @@ class FeatureBlock(StructBlock):
     Custom `StructBlock` for utilizing images with associated caption and
     attribution data
     """
-    heading = CharBlock(required=False)
+    heading = CharBlock(required=False, default='Why Choose Us')
     image = ImageChooserBlock(required=True)
     body = TextBlock(required=False)
     benefits = ListBlock(
         StructBlock(
             [
-                ('icon', ImageChooserBlock(required=False)),
                 ('description', RichTextBlock(required=False, max_length=40)),
             ]
         )
@@ -230,10 +222,6 @@ class HomePageBlock(StreamBlock):
     attribute  = AttributeBlock(
         template = "home/blocks/attribute_block.html",
         label = "Attributes"
-    )
-    services = ServiceBlock(
-        template = "home/blocks/service_block.html",
-        label = "Service"
     )
     team = TeamBlock(
         template = "home/blocks/team_block.html",

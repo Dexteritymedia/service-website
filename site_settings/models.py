@@ -51,7 +51,7 @@ class SiteSettings(BaseSiteSetting):
     place_id = models.CharField(max_length=100, null=True, blank=True, verbose_name='Google Place ID', help_text='Requires API Key to use place ID')
     map_zoom_level = models.IntegerField(null=True, verbose_name='Map zoom level', blank=True, help_text='Requires API Key to use zoom. 1: World, 5: Landmass/Continent, 10: City, 15: Streets, 20: Buildings')
     search = models.CharField(blank=True, verbose_name='Search', help_text='Address or search term used to find your location on the map', max_length=250)
-    shop_address = models.CharField(blank=True, verbose_name='Shop Address', help_text='Address or search term used to find your location on the map', max_length=250)
+    shop_address = models.CharField(blank=True, verbose_name='Shop Address', help_text='Address or search term used to find your location', default="Shop A7/A8 Ido Shopping Complex Apete Ibadan, Oyo State, Nigeria", max_length=250)
     time_and_date = RichTextField(verbose_name='Time and Day', blank=True,)
     phone_no = models.CharField(blank=True, verbose_name='Phone number', help_text='Your office phone number', max_length=250)
     email = models.EmailField(blank=True, verbose_name='Email', help_text='Enter your email address', max_length=250)

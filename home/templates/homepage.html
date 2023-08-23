@@ -1,6 +1,6 @@
 {% extends "main.html" %}
 
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags get_service %}
 
 
 {% block content %}
@@ -9,6 +9,6 @@
 	{% include_block block %}
 {% endfor %}
 
-{% include 'service_homepage.html' %}
+{% get_service %}
 
 {% endblock content %}

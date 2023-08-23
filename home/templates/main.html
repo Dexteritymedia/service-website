@@ -41,6 +41,12 @@
     <!-- Template Stylesheet -->
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 	
+	<style>
+	{% block style %}
+	
+	{% endblock style %}
+	</style>
+	
 	<!-- Other links -->
 	{{ settings.site_settings.SiteSettings.links }}
 	
@@ -74,7 +80,7 @@
 				{% if settings.site_settings.SiteSettings.time_and_date %}
                 <div class="h-100 d-inline-flex align-items-center py-3">
                     <small class="far fa-clock text-primary me-2"></small>
-                    <small>{{ settings.site_settings.SiteSettings.time_and_date }}</small>
+                    <small>{{ settings.site_settings.SiteSettings.time_and_date|richtext }}</small>
                 </div>
 				{% endif %}
             </div>
@@ -96,20 +102,24 @@
     </div>
     <!-- Topbar End -->
 
-
     <!-- Navbar Start -->
     <nav class="navbar navbar-expand-lg bg-white navbar-light sticky-top p-0">
+		{% if settings.site_settings.SiteSettings.show_title_in_menu_bar %}
 		{% if settings.site_settings.SiteSettings.site_name  %}
-        <a href="" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+        <a href="/" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
             <h2 class="m-0 text-primary">{{ settings.site_settings.SiteSettings.site_name  }}</h2>
         </a>
+		{% endif %}
+		{% endif %}
+		{% if settings.site_settings.SiteSettings.show_in_menu_bar %}
+		{% image settings.site_settings.SiteSettings.site_logo max-100x100 as icon_image %}
+		<a href="/" class="navbar-brand d-flex align-items-center px-4 px-lg-5"><img src="{{ icon_image.url }}" alt="{{ settings.site_settings.SiteSettings.site_name }}" class="img-fluid"></a>
 		{% endif %}
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
 		
-		
-		{% flat_menu template="menu/main_menu.html" handle="main_menu" %}
+		{% main_menu add_sub_menus_inline=True template="menu/main_menu.html" %}
     </nav>
     <!-- Navbar End -->
 	
@@ -152,11 +162,12 @@
 				</div>
             </div>
         </div>
+	</div>
 		{% if settings.site_settings.SiteSettings.place_id %}
 		<div class="container-fluid">
             <div class="row">
 				<div class="col-12">
-					<iframe class="embed-responsive-item" width="100%" style="border:0" src="https://www.google.com/maps/embed/v1/place?q=place_id:{{ settings.site_settings.SiteSettings.place_id }}&zoom={{ settings.site_settings.SiteSettings.map_zoom_level }}&key={{ settings.site_settings.SiteSettings.api_key }}" title="{{ settings.site_settings.SiteSettings.map_title }}" allowfullscreen></iframe>
+					<iframe class="embed-responsive-item" width="100%" height="400px" style="border:0" src="https://www.google.com/maps/embed/v1/place?q=place_id:{{ settings.site_settings.SiteSettings.place_id }}&zoom={{ settings.site_settings.SiteSettings.map_zoom_level }}&key={{ settings.site_settings.SiteSettings.api_key }}" title="{{ settings.site_settings.SiteSettings.map_title }}" allowfullscreen></iframe>
 					</div>
 			</div>
 		</div>
@@ -164,7 +175,7 @@
 		<div class="container-fluid">
             <div class="row">
 				<div class="col-12">
-					<iframe class="embed-responsive-item" width="100%" style="border:0" src="https://maps.google.com/maps?q={{ settings.site_settings.SiteSettings.search|urlencode }}&output=embed" title="{{ settings.site_settings.SiteSettings.map_title }}" allowfullscreen></iframe> 
+					<iframe class="embed-responsive-item" width="100%" height="400px" src="https://maps.google.com/maps?q={{ settings.site_settings.SiteSettings.search|urlencode }}&output=embed" title="{{ settings.site_settings.SiteSettings.map_title }}" allowfullscreen></iframe> 
 				</div>
 			</div>
 		</div>
@@ -180,7 +191,6 @@
 				{% endif %}
             </div>
         </div>
-    </div>
     <!-- Footer End -->
 
 

@@ -20,6 +20,8 @@ class HomePage(Page):
     template = "homepage.html"
     max_count = 1
 
+    show_in_menus_default = True
+
     content = StreamField(HomePageBlock(), use_json_field=True, blank=False, null=True)
 
     content_panels = Page.content_panels + [
@@ -29,13 +31,6 @@ class HomePage(Page):
     class Meta:
         verbose_name = 'Home'
         verbose_name_plural = 'Home'
-
-    def get_context(self, request):
-        context = super().get_context(request)
-        services = ServicePage.objects.live().public().exclude(id=self.id).order_by('-first_published_at')[:6]
-
-        context['services'] = services
-        return context
     
 
 class Service(Page):
@@ -44,6 +39,8 @@ class Service(Page):
     parent_page_types = [
         'HomePage'
         ]
+
+    show_in_menus_default = True
     
     call_to_action = StreamField(
         PageSectionStoryBlock(),
@@ -54,7 +51,7 @@ class Service(Page):
     )
     body = StreamField(StoryBlock(), use_json_field=True, blank=True, null=True)
 
-    """
+
     image = models.ForeignKey(
         "wagtailimages.Image",
         blank=False,
@@ -62,12 +59,12 @@ class Service(Page):
         related_name="+",
         on_delete=models.SET_NULL,
         )
-    """
     
     search_fields = Page.search_fields + [
         index.SearchField("body"),
     ]
     content_panels = Page.content_panels + [
+        FieldPanel("image"),
         FieldPanel("body"),
         FieldPanel("call_to_action"),
     ]
@@ -162,6 +159,8 @@ class StaticPage(Page):
     )
     body = StreamField(StoryBlock(), use_json_field=True, null=True)
 
+    show_in_menus_default = True
+
     search_fields = Page.search_fields + [
         index.SearchField("body"),
         index.SearchField("call_to_action"),
@@ -176,12 +175,11 @@ class StaticPage(Page):
         verbose_name = 'Other Page'
         verbose_name_plural = 'Other Pages'
 
-
     def get_context(self, request):
         context = super().get_context(request)
-        services = ServicePage.objects.live().public().exclude(id=self.id).order_by('-first_published_at')[:4]
+        service = Service.objects.live().public()
 
-        context['services'] = services
+        context['service'] = service
         return context
     
 
@@ -199,8 +197,8 @@ class FormPage(AbstractEmailForm):
     parent_page_types = [
         'HomePage'
         ]
-
-
+    show_in_menus_default = True
+    
     max_count = 2
     
     intro = RichTextField(blank=True)
@@ -219,5 +217,12 @@ class FormPage(AbstractEmailForm):
         FieldPanel('intro', classname='full'),
         FieldPanel('thank_you_text', classname='full'),
     ]
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        testimonials = FormPage.objects.live().public().order_by('-first_published_at')[:5]
+
+        context['testimonials'] = testimonials
+        return context
 
 

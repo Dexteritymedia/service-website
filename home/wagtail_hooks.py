@@ -11,10 +11,6 @@ def change_page_name(request, menu_items):
             item.label = 'Snippets'
 
 @hooks.register("construct_settings_menu")
-def hide_main_menu_menu_item(request, menu_items):
-    menu_items[:] = [item for item in menu_items if item.name != "main-menu"]
-
-@hooks.register("construct_settings_menu")
 def hide_help_menu_item(request, menu_items):
     menu_items[:] = [item for item in menu_items if item.name != "help"]
 

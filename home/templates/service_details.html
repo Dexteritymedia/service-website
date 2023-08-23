@@ -5,14 +5,16 @@
 
 
     <!-- Page Header Start -->
-    <div class="container-fluid page-header py-5 mb-5">
+    {% image page.get_parent.specific.image original as photo %}
+    <div class="container-fluid py-5 mb-5" style="background: linear-gradient(rgba(53, 53, 53, .7), rgba(53, 53, 53, .7)), url({{ photo.url }}) center center no-repeat; background-size: cover;">
         <div class="container py-5">
-            <h1 class="display-3 text-white mb-3 animated slideInDown">{{ page.get_ancestor.title|title }}</h1>
+            <h1 class="display-3 text-white mb-3 animated slideInDown">{{ page.get_parent.specific.title|title }}</h1>
             <nav aria-label="breadcrumb animated slideInDown">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a class="text-white" href="/">Home</a></li>
                     <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
-                    <li class="breadcrumb-item text-white active" aria-current="page">Service</li>
+                    <li class="breadcrumb-item"><a class="text-white" href="{{ page.get_parent.specific.url }}">{{ page.get_parent.specific.title|title }}</a></li>
+					<li class="breadcrumb-item text-white active" aria-current="page">{{ page.service_title|title }}</li>
                 </ol>
             </nav>
         </div>
@@ -42,7 +44,7 @@
 						{% if block.block_type == 'photos' %}
 							{% for img in block.value.images %}
 								{% image img original as photo %}
-								<div class="col-md-3">
+								<div class="col-sm-12 col-md-6">
 									<div class="overflow-hidden">
 										<img class="img-fluid" src="{{ photo.url }}" alt="">
 									</div>

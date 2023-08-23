@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "main.html" %}
 {% load static wagtailcore_tags %}
 
 {% block body_class %}template-searchresults{% endblock %}
@@ -6,6 +6,8 @@
 {% block title %}Search{% endblock %}
 
 {% block content %}
+<div class="container-xxl py-5">
+        <div class="container">
 <h1>Search</h1>
 
 <form action="{% url 'search' %}" method="get">
@@ -35,4 +37,6 @@
 {% elif search_query %}
 No results found
 {% endif %}
+</div>
+</div>
 {% endblock %}

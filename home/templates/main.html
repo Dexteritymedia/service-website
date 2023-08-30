@@ -16,11 +16,12 @@
     </title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
-    <meta content="" name="description">
-
-    <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon">
-
+	{% block meta_description %}
+	{% if page.search_description %}
+    <meta content="{{ page.search_description }}" name="description">
+	{% endif %}
+	{% endblock meta_description %}
+	
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -50,6 +51,7 @@
 	<!-- Other links -->
 	{{ settings.site_settings.SiteSettings.links }}
 	
+	<!-- Favicon -->
 	{% if settings.site_settings.SiteSettings.site_logo %}
 		{% image settings.site_settings.SiteSettings.site_logo max-30x30 as icon_image %}
 		<link rel="shortcut icon" href="{{ icon_image.url }}" />
@@ -107,7 +109,7 @@
 		{% if settings.site_settings.SiteSettings.show_title_in_menu_bar %}
 		{% if settings.site_settings.SiteSettings.site_name  %}
         <a href="/" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-            <h2 class="m-0 text-primary">{{ settings.site_settings.SiteSettings.site_name  }}</h2>
+            <h4 class="m-0 text-primary">{{ settings.site_settings.SiteSettings.site_name  }}</h4>
         </a>
 		{% endif %}
 		{% endif %}

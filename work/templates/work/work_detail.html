@@ -1,5 +1,5 @@
 {% extends "main.html" %}
-{% load wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags %}
 
 {% block content %}
 
@@ -48,13 +48,14 @@
 		{% endif %}
             <div class="row">
 				<div class="col-12 wow fadeInUp" data-wow-delay="0.1s">
+					<p>{{ page.owner|title }}</p>
                     <div class="service-item">
                         <div class="p-4 text-center border border-5 border-light border-top-0">
-                            <p>{{ page.description }}</p>
+                            <p>{{ page.body }}</p>
                         </div>
                     </div>
                 </div>
-
+				{{ page.screenshots }}
 				<div class="row g-4">
 				{% for block in page.images %}
 						{% if block.block_type == 'photos' %}
@@ -72,6 +73,28 @@
 			</div>
 		</div>
 	</div>
+	
+	<a href="{% routablepageurl page "author_works" %}">Find More</a>
+	
+	{% for author in author_works %}
+	<div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="section-title text-center">
+                <h1 class="display-5 mb-5">Works by {{author.owner.first_name}}</h1>
+            </div>
+            <div class="owl-carousel testimonial-carousel">
+                <div class="testimonial-item text-center">
+                    <img class="img-fluid bg-light p-2 mx-auto mb-3" src="{{ request.user.wagtail_userprofile.avatar.url }}" style="width: 90px; height: 90px;">
+                    <div class="testimonial-text text-center p-4">
+                        <p>Date Joined: {{ request.user.profile.date_joined }}</p>
+                        <h5 class="mb-1">Client Name</h5>
+                        <span class="fst-italic">{{ request.user.bio }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	{% endfor %}
 
     
 

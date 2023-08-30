@@ -45,13 +45,13 @@ class SliderBlock(StructBlock):
     slides = ListBlock(
         StructBlock(
             [
-                ('image', ImageChooserBlock(required=False)),
+                ('image', ImageChooserBlock(required=True)),
                 ('title', CharBlock(required=False, max_length=40)),
-                ('body', RichTextBlock(required=True, features=['h1','h2','h3','h4','h5','h6','hr','bold','italic','link'],)),
-                ('button_page', PageChooserBlock(required=False)),
-                ('button_page_text', CharBlock(required=False, default='Read More', max_length=40)),
-                ('button_url', URLBlock(required=False, help_text='If the button page above is selected, that will be used first')),
-                ('button_url_text', CharBlock(required=False, default='Learn More', max_length=40)),
+                ('text', RichTextBlock(required=False, features=['h1','h2','h3','h4','h5','h6','hr','bold','italic','link'],)),
+                ('page', PageChooserBlock(required=False)),
+                ('page_text', CharBlock(required=False, default='Find Out', max_length=40)),
+                ('url', URLBlock(required=False, help_text='If the button page above is selected, that will be used first')),
+                ('url_text', CharBlock(required=False, default='Learn More', max_length=40)),
             ]
         )
     )
@@ -69,9 +69,8 @@ class AboutUsBlock(StructBlock):
     attribution data
     """
     image = ImageChooserBlock(required=True)
-    title = CharBlock(required=False, default='About Us',)
-    description = TextBlock(required=False)
-    link = PageChooserBlock(required=False, target_model=['home.StaticPage'])
+    title = CharBlock(required=False,)
+    link = PageChooserBlock(required=True, target_model=['home.StaticPage'])
     link_text = CharBlock(default='Explore More')
     benefits = ListBlock(
         StructBlock(
@@ -123,7 +122,7 @@ class ServiceBlock(StructBlock):
                 ('title', CharBlock(required=False, max_length=40)),
                 ('description', TextBlock(required=False)),
                 ('link', PageChooserBlock(required=False, target_model=['home.ServicePage'])),
-                ('button_text', CharBlock(required=False, default='Read More', max_length=40)),
+                ('button_text', CharBlock(required=False, default='Find Out', max_length=40)),
             ]
         )
     )
@@ -178,11 +177,11 @@ class FeatureBlock(StructBlock):
     """
     heading = CharBlock(required=False, default='Why Choose Us')
     image = ImageChooserBlock(required=True)
-    body = TextBlock(required=False)
+    text = RichTextBlock(required=False)
     benefits = ListBlock(
         StructBlock(
             [
-                ('description', RichTextBlock(required=False, max_length=40)),
+                ('description', TextBlock(required=False)),
             ]
         )
     )

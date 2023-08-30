@@ -1,77 +1,94 @@
 {% extends "main.html" %}
 {% load wagtailcore_tags wagtailimages_tags %}
 
+{% block style %}
+
+{% endblock style %}
+
 {% block content %}
 
 
     <!-- Page Header Start -->
-	{% if page.get_parent.specific.title == 'Home' %}
-	{% for service in service %}
-	{% image service.image original as photo %}
-	<div class="container-fluid py-5 mb-5" style="background: linear-gradient(rgba(53, 53, 53, .7), rgba(53, 53, 53, .7)), url({{ photo.url }}) center center no-repeat; background-size: cover;">
-	{% endfor %}
-	{% else %}
-    {% image page.get_parent.specific.image original as photo %}
+	{% image page.image original as photo %}
     <div class="container-fluid py-5 mb-5" style="background: linear-gradient(rgba(53, 53, 53, .7), rgba(53, 53, 53, .7)), url({{ photo.url }}) center center no-repeat; background-size: cover;">
-	{% endif %}
         <div class="container py-5">
-            {% if page.get_parent.specific.title == 'Home' %}
-			<h1 class="display-3 text-white mb-3 animated slideInDown">Services</h1>
-			{% else %}
-			<h1 class="display-3 text-white mb-3 animated slideInDown">{{ page.get_parent.specific.title|title }}</h1>
-			{% endif %}
+            <h1 class="display-3 text-white mb-3 animated slideInDown">{{ page.title|title }}</h1>
             <nav aria-label="breadcrumb animated slideInDown">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a class="text-white" href="/">Home</a></li>
-					{% if page.get_parent.specific.title == 'Home' %}
-					{% for service in service %}
-                    <li class="breadcrumb-item"><a class="text-white" href="{{ service.url }}">Services</a></li>
-					{% endfor %}
-					{% else %}
-					<li class="breadcrumb-item"><a class="text-white" href="{{ page.get_parent.specific.url }}">{{ page.get_parent.specific.title|title }}</a></li>
-					{% endif %}
-					<li class="breadcrumb-item text-white active" aria-current="page">{{ page.service_title|title }}</li>
+                    <li class="breadcrumb-item text-white active" aria-current="page">{{ page.title|title }}</li>
                 </ol>
             </nav>
         </div>
     </div>
     <!-- Page Header End -->
 
-
     <!-- Service Start -->
     <div class="container-xxl py-5">
         <div class="container">
-		{% if page.service_title %}
             <div class="section-title text-center">
-                <h1 class="display-5 mb-5">{{ page.service_title }}</h1>
+                <h1 class="display-5 mb-5">Our {{ page.title|title }}</h1>
             </div>
-		{% endif %}
-            <div class="row">
-				<div class="col-12 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="row g-4">
+               {% for service in services %}
+	<div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="service-item">
+					{% for block in service.images %}
+						{% if block.block_type == 'photos' %}
+							{% image block.value.images.0 original as photo %}
+							<div class="overflow-hidden">
+								<img class="img-fluid" src="{{ photo.url }}" alt="{{ photo.alt }}">
+							</div>
+						{% endif %}
+					
+					{% endfor %}
                         <div class="p-4 text-center border border-5 border-light border-top-0">
-                            <p>{{ page.description }}</p>
+                            <h4 class="mb-3">{{ service.service_title }}</h4>
+                            <p>{{ service.description|richtext|safe|truncatewords:25 }}</p>
+                            <a class="fw-medium" href="{{ service.url }}">Find Out<i class="fa fa-arrow-right ms-2"></i></a>
                         </div>
                     </div>
                 </div>
+{% endfor %}
+</div> 
 
-				<div class="row g-4">
-				{% for block in page.images %}
-						{% if block.block_type == 'photos' %}
-							{% for img in block.value.images %}
-								{% image img original as photo %}
-								<div class="col-sm-12 col-md-6">
-									<div class="overflow-hidden">
-										<img class="img-fluid" src="{{ photo.url }}" alt="{{ photo.url }}">
-									</div>
-								</div>
-							{% endfor %}
-						{% endif %}
-				{% endfor %}
-				</div>
-			</div>
+
+{% if services.paginator.num_pages > 1 %}
+		<div class="container">
+		<div class="row">
+		<div class="col-lg-12">
+		<div class="pagination justify-content-center mt-3 mb-3">
+		{% if services.has_previous %}
+		<li class="page-item">
+		<a href="?page={{ services.previous_page_number }}" class="page-link">
+		<span>&laquo;</span>
+		</a>
+		</li>
+		{% endif %}
+		
+		{% for page_num in services.paginator.page_range %}
+		<li class="page-item {% if page_num == services.number %} active{% endif %}">
+		<a href="?page={{ page_num }}" class="page-link">
+		{{ page_num }}
+		</a>
+		</li>
+		{% endfor %}
+		
+		{% if services.has_next %}
+		<li class="page-item">
+		<a href="?page={{ services.next_page_number }}" class="page-link">
+		<span>&raquo;</span>
+		</a>
+		</li>
+		{% endif %}
 		</div>
-	</div>
+		</div>
+		</div>
+		</div>
+		{% endif %}
+
+</div>
+</div>
 
     
 
@@ -111,36 +128,5 @@
         </div>
     </div>
     <!-- Testimonial End -->
-	
-	
-	<div class="container-xxl py-5">
-        <div class="container">
-            <div class="section-title text-center">
-                <h1 class="display-5 mb-5">{{ page.other_services_title }}</h1>
-            </div>
-            <div class="row g-4">
-               {% for service in services %}
-	<div class="col-md-6 col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="service-item">
-					{% for block in service.images %}
-						{% if block.block_type == 'photos' %}
-							{% image block.value.images.0 original as photo %}
-							<div class="overflow-hidden">
-								<img class="img-fluid" src="{{ photo.url }}" alt="{{ photo.alt }}">
-							</div>
-						{% endif %}
-					
-					{% endfor %}
-                        <div class="p-4 text-center border border-5 border-light border-top-0">
-                            <h4 class="mb-3">{{ service.service_title }}</h4>
-                            <p>{{ service.description|richtext|safe|truncatewords:25 }}</p>
-                            <a class="fw-medium" href="{{ service.url }}">Find Out<i class="fa fa-arrow-right ms-2"></i></a>
-                        </div>
-                    </div>
-                </div>
-{% endfor %}
-</div> 
-</div> 
-</div> 
 
 {% endblock content %}

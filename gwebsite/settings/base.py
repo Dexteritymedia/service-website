@@ -32,9 +32,12 @@ environ.Env.read_env(os.path.join(BASE_DIR, './.env'))
 INSTALLED_APPS = [
     "home",
     "chatbot",
+    "work",
+    "partners",
     "site_settings",
     "search",
     "wagtailmenus",
+    "wagtail.contrib.routable_page",
     "wagtail.contrib.settings",
     "wagtail.contrib.modeladmin",
     "wagtail.contrib.forms",

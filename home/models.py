@@ -35,7 +35,7 @@ class HomePage(Page):
 
 class Service(Page):
     max_count = 1
-    template = 'service.html'
+    template = 'services.html'
     parent_page_types = [
         'HomePage'
         ]
@@ -138,7 +138,9 @@ class ServicePage(Page):
     def get_context(self, request):
         context = super().get_context(request)
         services = ServicePage.objects.live().public().exclude(id=self.id).order_by('-first_published_at')[:4]
+        service = Service.objects.live().public()
 
+        context['service'] = service
         context['services'] = services
         return context
 
@@ -157,6 +159,7 @@ class StaticPage(Page):
         collapsed=False,
         null=True,
     )
+    
     body = StreamField(StoryBlock(), use_json_field=True, null=True)
 
     show_in_menus_default = True

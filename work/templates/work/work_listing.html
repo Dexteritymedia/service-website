@@ -9,15 +9,13 @@
 
 
     <!-- Page Header Start -->
-	{% image page.image original as photo %}
-    <div class="container-fluid py-5 mb-5" style="background: linear-gradient(rgba(53, 53, 53, .7), rgba(53, 53, 53, .7)), url({{ photo.url }}) center center no-repeat; background-size: cover;">
-        <div class="container py-5">
-            <h1 class="display-3 text-white mb-3 animated slideInDown">{{ page.title|title }}</h1>
+    <div class="container-fluid mt-5">
+        <div class="container">
+            <h1 class="display-3 mb-3 animated slideInDown">{{ page.title|title }}</h1>
             <nav aria-label="breadcrumb animated slideInDown">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a class="text-white" href="/">Home</a></li>
-                    <li class="breadcrumb-item"><a class="text-white" href="#">Pages</a></li>
-                    <li class="breadcrumb-item text-white active" aria-current="page">{{ page.title|title }}</li>
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ page.title|title }}</li>
                 </ol>
             </nav>
         </div>
@@ -27,11 +25,12 @@
     <!-- Service Start -->
     <div class="container-xxl py-5">
         <div class="container">
+		<div>{{ page.intro|richtext }}</div>
             <div class="section-title text-center">
-                <h1 class="display-5 mb-5">Our {{ page.title|title }}</h1>
+                <h1 class="display-5 mb-5">Our {{ page.title|title }}s</h1>
             </div>
             <div class="row g-4">
-               {% for service in services %}
+               {% for service in works %}
 	<div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="service-item">
 					{% for block in service.images %}
@@ -46,7 +45,8 @@
                         <div class="p-4 text-center border border-5 border-light border-top-0">
                             <h4 class="mb-3">{{ service.service_title }}</h4>
                             <p>{{ service.description|richtext|safe|truncatewords:25 }}</p>
-                            <a class="fw-medium" href="{{ service.url }}">Read More<i class="fa fa-arrow-right ms-2"></i></a>
+							<p>Made by: {{ service.owner|title }}</p>
+                            <a class="fw-medium" href="{{ service.url }}">Find Out<i class="fa fa-arrow-right ms-2"></i></a>
                         </div>
                     </div>
                 </div>
@@ -54,30 +54,30 @@
 </div> 
 
 
-{% if services.paginator.num_pages > 1 %}
+{% if works.paginator.num_pages > 1 %}
 		<div class="container">
 		<div class="row">
 		<div class="col-lg-12">
 		<div class="pagination justify-content-center mt-3 mb-3">
-		{% if services.has_previous %}
+		{% if works.has_previous %}
 		<li class="page-item">
-		<a href="?page={{ services.previous_page_number }}" class="page-link">
+		<a href="?page={{ works.previous_page_number }}" class="page-link">
 		<span>&laquo;</span>
 		</a>
 		</li>
 		{% endif %}
 		
-		{% for page_num in services.paginator.page_range %}
-		<li class="page-item {% if page_num == services.number %} active{% endif %}">
+		{% for page_num in works.paginator.page_range %}
+		<li class="page-item {% if page_num == works.number %} active{% endif %}">
 		<a href="?page={{ page_num }}" class="page-link">
 		{{ page_num }}
 		</a>
 		</li>
 		{% endfor %}
 		
-		{% if services.has_next %}
+		{% if works.has_next %}
 		<li class="page-item">
-		<a href="?page={{ services.next_page_number }}" class="page-link">
+		<a href="?page={{ works.next_page_number }}" class="page-link">
 		<span>&raquo;</span>
 		</a>
 		</li>

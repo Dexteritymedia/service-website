@@ -11,9 +11,9 @@
                         <div class="row justify-content-center">
                             <div class="col-12 col-lg-8 text-center">
                                 <h1 class="display-3 text-white animated slideInDown mb-4">{{ slide.title }}</h1>
-                                <p class="fs-5 fw-medium text-white mb-4 pb-2">{{ slide.body }}</p>
-                                {% if slide.button_page %}<a href="{{ slide.button_page.url }}" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">{{ slide.button_page_text }}</a>{% endif %}
-                                {% if slide.button_url %}<a href="{{ slide.button_url }}" class="btn btn-light py-md-3 px-md-5 animated slideInRight">{{ slide.button_url_text }}</a>{% endif %}
+                                {% if slide.text %}<div class="fs-5 fw-medium text-white mb-4 pb-2">{{ slide.text|richtext }}</div>{% endif %}
+                                {% if slide.page %}<a href="{{ slide.button_page.url }}" class="btn btn-primary py-md-3 px-md-5 me-3 animated slideInLeft">{{ slide.page_text }}</a>{% endif %}
+                                {% if slide.url %}<a href="{{ slide.button_url }}" class="btn btn-light py-md-3 px-md-5 animated slideInRight">{{ slide.url_text }}</a>{% endif %}
                             </div>
                         </div>
                     </div>

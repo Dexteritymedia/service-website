@@ -47,10 +47,10 @@ class SliderBlock(StructBlock):
             [
                 ('image', ImageChooserBlock(required=True)),
                 ('title', CharBlock(required=False, max_length=40)),
-                ('text', RichTextBlock(required=False, features=['h1','h2','h3','h4','h5','h6','hr','bold','italic','link'],)),
+                ('text', RichTextBlock(required=False, features=['h1','h2','h3','h4','h5','h6','bold','italic'],)),
                 ('page', PageChooserBlock(required=False)),
                 ('page_text', CharBlock(required=False, default='Find Out', max_length=40)),
-                ('url', URLBlock(required=False, help_text='If the button page above is selected, that will be used first')),
+                ('url', URLBlock(required=False, help_text='Enter a website url e.g www.example.com')),
                 ('url_text', CharBlock(required=False, default='Learn More', max_length=40)),
             ]
         )
@@ -155,12 +155,12 @@ class TeamBlock(StructBlock):
       
 
 class ProjectBlock(StructBlock):
-    heading = CharBlock(required=False, default='Our Projects/Portfolios')
+    heading = CharBlock(required=False, default='Our Projects & Portfolios')
     
     projects = ListBlock(
         StructBlock(
             [
-                ('image', ImageChooserBlock(required=False)),
+                ('image', ImageChooserBlock(required=True)),
                 ('link', PageChooserBlock(required=False)),
             ]
         )
@@ -454,6 +454,9 @@ class StoryBlock(StreamBlock):
 
     class Meta:
         template = "blocks/stream_block.html"
+        block_counts = {
+            'paragraph': {'min_num': 1, 'max_num': 1}
+        }
 
 
 class PageSectionStoryBlock(StreamBlock):

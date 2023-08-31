@@ -100,6 +100,8 @@ class WorkIndexPage(Page):
 
     max_count = 1
 
+    parent_page_types = ["home.HomePage"]
+
     subpage_types = ["WorkPage"]
 
     intro = RichTextField(blank=True)

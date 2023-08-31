@@ -1,11 +1,19 @@
+import requests
+
 from django.shortcuts import render
 
-# Create your views here.
 from wagtail.models import Page
 
 from .models import Message
-import requests
+#from .utils import *
 
+def chatbot(request):
+    if request.method == 'POST':
+        message = request.POST.get('message')
+        response = generate_answers(message)
+
+        return JsonResponse({'message': message, 'response': response})
+    return render(request, 'chat.html',)
 
 def chat_view(request):
     if request.method == "POST":

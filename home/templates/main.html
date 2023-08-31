@@ -186,8 +186,8 @@
             <div class="copyright">
 				{% if settings.site_settings.SiteSettings.site_name  %}
                 <div class="row">
-                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                        &copy; <a class="border-bottom" href="/">{{ settings.site_settings.SiteSettings.site_name  }}</a>, All Right Reserved.
+                    <div class="col-12 text-center text-md-start mb-3 mb-md-0">
+                        &copy; {% now 'Y' %}, <a class="border-bottom" href="/">{{ settings.site_settings.SiteSettings.site_name  }}</a>, All Rights Reserved.
                     </div>
                 </div>
 				{% endif %}

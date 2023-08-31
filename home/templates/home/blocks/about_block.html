@@ -12,18 +12,19 @@
                 </div>
                 <div class="col-lg-6 about-text py-5 wow fadeIn" data-wow-delay="0.5s">
                     <div class="p-lg-5 pe-lg-0">
-					{% if self.title %}
+						{% if self.title %}
 						<div class="section-title text-start">
                             <h1 class="display-5 mb-4">{{ self.title|title }}</h1>
                         </div>
-					{% else %}
+						{% else %}
                         <div class="section-title text-start">
                             <h1 class="display-5 mb-4">{{ self.link.title|title }}</h1>
                         </div>
-					{% endif %}
+						{% endif %}
 						{% for link in self.link.body %}
-						<div class="mb-4 pb-2">vv{{link.value|safe}}</div>
-                        <div class="mb-4 pb-2">{{link|safe|truncatewords:25}}</div>
+							{% if link.block_type == 'paragraph' %}
+								<div class="mb-4 pb-2">{{link.value|richtext|safe|truncatewords:30}}</div>
+							{% endif %}
 						{% endfor %}
                         <div class="row g-4 mb-4 pb-2">
 						{% for benefit in self.benefits %}
@@ -41,16 +42,6 @@
 						{% endfor %}
                         </div>
 						{% if self.link %}<a href="{{ self.link.url }}" class="btn btn-primary py-3 px-5">{{ self.link_text }}</a>{% endif %}
-						
-						{% for link in self.link.body %}
-						<p>{{link|safe|truncatewords:25}}</p>
-						{{link.value.5}}
-						{{link.block.h2}}
-						{{link.value.block.h2}}
-						{{link.block.value.h2}}
-						{{link.block.link.value.h2}}
-						{% endfor %}
-						
                     </div>
                 </div>
             </div>

@@ -19,6 +19,12 @@ from .blocks import *
 class HomePage(Page):
     template = "homepage.html"
     max_count = 1
+    parent_page_types = [
+        'HomePage'
+        ]
+    subpage_types = [
+        'HomePage'
+        ]
 
     show_in_menus_default = True
 
@@ -149,6 +155,9 @@ class StaticPage(Page):
     template = 'static_detail.html'
     parent_page_types = [
         'HomePage'
+        ]
+    subpage_types = [
+        'StaticPage'
         ]
     page_description = "Use this page to create an about page, terms and condition page"
     

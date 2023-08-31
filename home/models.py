@@ -22,9 +22,6 @@ class HomePage(Page):
     parent_page_types = [
         'HomePage'
         ]
-    subpage_types = [
-        'HomePage'
-        ]
 
     show_in_menus_default = True
 

@@ -1,19 +1,27 @@
 {% extends "main.html" %}
-{% load wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags %}
+{% load wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags get_service %}
 
 {% block content %}
 
 
     <!-- Page Header Start -->
-	{% if page.get_parent.specific.title == 'Home' %}
-	{% for service in service %}
-	{% image service.image original as photo %}
+	
+	{% for block in page.body %}
+						{% if block.block_type == 'wide_image' %}
+						{% image block.value.image.0 original as photo %}
+							
+								<div class="col-sm-12 col-md-6">
+								
+										<img class="img-fluid" src="{{ photo.url }}" alt="{{ photo.alt }}">
+									
+								</div>
+							
+						{% endif %}
+				{% endfor %}
+	{% for photo in page.screenshots.0 %}
+	{% image photo.image original as photo %}
 	<div class="container-fluid py-5 mb-5" style="background: linear-gradient(rgba(53, 53, 53, .7), rgba(53, 53, 53, .7)), url({{ photo.url }}) center center no-repeat; background-size: cover;">
 	{% endfor %}
-	{% else %}
-    {% image page.get_parent.specific.image original as photo %}
-    <div class="container-fluid py-5 mb-5" style="background: linear-gradient(rgba(53, 53, 53, .7), rgba(53, 53, 53, .7)), url({{ photo.url }}) center center no-repeat; background-size: cover;">
-	{% endif %}
         <div class="container py-5">
             {% if page.get_parent.specific.title == 'Home' %}
 			<h1 class="display-3 text-white mb-3 animated slideInDown">Services</h1>
@@ -24,146 +32,97 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a class="text-white" href="/">Home</a></li>
 					{% if page.get_parent.specific.title == 'Home' %}
-					{% for service in service %}
                     <li class="breadcrumb-item"><a class="text-white" href="{{ service.url }}">Services</a></li>
-					{% endfor %}
 					{% else %}
 					<li class="breadcrumb-item"><a class="text-white" href="{{ page.get_parent.specific.url }}">{{ page.get_parent.specific.title|title }}</a></li>
 					{% endif %}
-					<li class="breadcrumb-item text-white active" aria-current="page">{{ page.service_title|title }}</li>
+					<li class="breadcrumb-item text-white active" aria-current="page">{{ page.title|title }}</li>
                 </ol>
             </nav>
         </div>
     </div>
     <!-- Page Header End -->
 
-
     <!-- Service Start -->
     <div class="container-xxl py-5">
         <div class="container">
-		{% if page.service_title %}
-            <div class="section-title text-center">
-                <h1 class="display-5 mb-5">{{ page.service_title }}</h1>
-            </div>
-		{% endif %}
             <div class="row">
 				<div class="col-12 wow fadeInUp" data-wow-delay="0.1s">
-					<p>{{ page.owner|title }}</p>
-                    <div class="service-item">
-                        <div class="p-4 text-center border border-5 border-light border-top-0">
-                            <p>{{ page.body }}</p>
-                        </div>
-                    </div>
-                </div>
-				{{ page.screenshots }}
-				<div class="row g-4">
-				{% for block in page.images %}
-						{% if block.block_type == 'photos' %}
-							{% for img in block.value.images %}
-								{% image img original as photo %}
-								<div class="col-sm-12 col-md-6">
-									<div class="overflow-hidden">
-										<img class="img-fluid" src="{{ photo.url }}" alt="{{ photo.url }}">
-									</div>
-								</div>
-							{% endfor %}
+					<h5>Created by:
+						{% if author_details.owner.wagtail_userprofile.avatar %}
+						<img class="img-fluid bg-light p-2 mx-auto mb-3" src="{{ author_details.owner.wagtail_userprofile.avatar.url }}" alt="{{ author_details.owner.get_full_name }}" style="width: 60px; height: 60px;">
+						{% else %}
+						<i class="fa fa-user"></i>
 						{% endif %}
-				{% endfor %}
+						<a href="{% routablepageurl page "author_works" %}"> {{ page.owner|title }}</a></h5>
+                            {{ page.body }}
+                </div>
+                </div>
+				
+				<div class="row text-center mt-5">
+					{% for photo in page.screenshots.all %}
+					<div class="col-sm-12 col-md-6 col-lg-4 mb-5">
+						{% image photo.image original as img %}
+							<img src="{{ img.url }}" alt="{{ img.alt }}">
+					</div>
+					{% endfor %}
 				</div>
+				
 			</div>
 		</div>
 	</div>
 	
-	<a href="{% routablepageurl page "author_works" %}">Find More</a>
 	
-	{% for author in author_works %}
 	<div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
-        <div class="container">
+        <div class="container py-5">
+			<div class="row">
+				{% if author_details.owner.wagtail_userprofile.avatar %}
+				<div class="col-md-4 text-center">
+                    <img class="img-fluid bg-light p-2 mx-auto mb-3" src="{{ author_details.owner.wagtail_userprofile.avatar.url }}" alt="{{ author_details.owner.get_full_name }}" style="width: 100px; height: 100px;">
+				</div>
+				{% else %}
+				<div class="col-md-4 text-center">
+					<i class="fa fa-user fa-5x"></i>
+				</div>
+				{% endif %}
+				<div class="col-md-8 text-center">
+					<h5 class="mb-1">Name: {{author_details.owner.last_name|title}} {{author_details.owner.first_name|title}}</h5>
+                        <p>Date Joined: {{ author_details.owner.profile.date_joined }}</p>
+                        <p class="fst-italic">Bio: {{ author_details.owner.bio }}</p>
+				</div>
+			</div>
+			
+			{% if author_works %}
             <div class="section-title text-center">
-                <h1 class="display-5 mb-5">Works by {{author.owner.first_name}}</h1>
+                <h1 class="display-5 mb-5">More Works by {{author_details.owner.first_name|title}}</h1>
             </div>
-            <div class="owl-carousel testimonial-carousel">
-                <div class="testimonial-item text-center">
-                    <img class="img-fluid bg-light p-2 mx-auto mb-3" src="{{ request.user.wagtail_userprofile.avatar.url }}" style="width: 90px; height: 90px;">
-                    <div class="testimonial-text text-center p-4">
-                        <p>Date Joined: {{ request.user.profile.date_joined }}</p>
-                        <h5 class="mb-1">Client Name</h5>
-                        <span class="fst-italic">{{ request.user.bio }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-	{% endfor %}
-
-    
-
-
-    <!-- Testimonial Start -->
-    <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
-        <div class="container">
-            <div class="section-title text-center">
-                <h1 class="display-5 mb-5">Testimonial</h1>
-            </div>
-            <div class="owl-carousel testimonial-carousel">
-                <div class="testimonial-item text-center">
-                    <img class="img-fluid bg-light p-2 mx-auto mb-3" src="img/testimonial-1.jpg" style="width: 90px; height: 90px;">
-                    <div class="testimonial-text text-center p-4">
-                        <p>Clita clita tempor justo dolor ipsum amet kasd amet duo justo duo duo labore sed sed. Magna ut diam sit et amet stet eos sed clita erat magna elitr erat sit sit erat at rebum justo sea clita.</p>
-                        <h5 class="mb-1">Client Name</h5>
-                        <span class="fst-italic">Profession</span>
-                    </div>
-                </div>
-                <div class="testimonial-item text-center">
-                    <img class="img-fluid bg-light p-2 mx-auto mb-3" src="img/testimonial-2.jpg" style="width: 90px; height: 90px;">
-                    <div class="testimonial-text text-center p-4">
-                        <p>Clita clita tempor justo dolor ipsum amet kasd amet duo justo duo duo labore sed sed. Magna ut diam sit et amet stet eos sed clita erat magna elitr erat sit sit erat at rebum justo sea clita.</p>
-                        <h5 class="mb-1">Client Name</h5>
-                        <span class="fst-italic">Profession</span>
-                    </div>
-                </div>
-                <div class="testimonial-item text-center">
-                    <img class="img-fluid bg-light p-2 mx-auto mb-3" src="img/testimonial-3.jpg" style="width: 90px; height: 90px;">
-                    <div class="testimonial-text text-center p-4">
-                        <p>Clita clita tempor justo dolor ipsum amet kasd amet duo justo duo duo labore sed sed. Magna ut diam sit et amet stet eos sed clita erat magna elitr erat sit sit erat at rebum justo sea clita.</p>
-                        <h5 class="mb-1">Client Name</h5>
-                        <span class="fst-italic">Profession</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Testimonial End -->
-	
-	
-	<div class="container-xxl py-5">
-        <div class="container">
-            <div class="section-title text-center">
-                <h1 class="display-5 mb-5">{{ page.other_services_title }}</h1>
-            </div>
-            <div class="row g-4">
-               {% for service in services %}
-	<div class="col-md-6 col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
+			{% for service in author_works %}
+				<div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="service-item">
-					{% for block in service.images %}
-						{% if block.block_type == 'photos' %}
-							{% image block.value.images.0 original as photo %}
-							<div class="overflow-hidden">
-								<img class="img-fluid" src="{{ photo.url }}" alt="{{ photo.alt }}">
-							</div>
-						{% endif %}
-					
-					{% endfor %}
+
                         <div class="p-4 text-center border border-5 border-light border-top-0">
-                            <h4 class="mb-3">{{ service.service_title }}</h4>
-                            <p>{{ service.description|richtext|safe|truncatewords:25 }}</p>
+                            <h4 class="mb-3">{{ service.title|title }}</h4>
+							{% for item in service.body %}
+								{% if item.block_type == 'paragraph' %}
+									<div class="mb-4 pb-2">{{item.value|richtext|safe|truncatewords:30}}</div>
+								{% endif %}
+								{% if item.block_type == 'wide_image' %}
+									{% image item.value.images.0 original as photo %}
+									<div class="overflow-hidden">
+										<img class="img-fluid" src="{{ photo.url }}" alt="{{ photo.alt }}">
+									</div>
+								{% endif %}
+							{% endfor %}
                             <a class="fw-medium" href="{{ service.url }}">Find Out<i class="fa fa-arrow-right ms-2"></i></a>
                         </div>
                     </div>
                 </div>
-{% endfor %}
-</div> 
-</div> 
-</div> 
+			{% endfor %}
+			{% endif %}
+        </div>
+    </div>
+
+	
+	{% get_service %}
 
 {% endblock content %}

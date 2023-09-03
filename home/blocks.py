@@ -349,7 +349,7 @@ class WideImage(StructBlock):
         min_num = 1
         max_num = 1
         block_counts = {
-            'image': {'min_num': 1, 'max_num': 1},
+            'image': {'max_num': 1},
         }
 
 
@@ -455,7 +455,7 @@ class StoryBlock(StreamBlock):
     class Meta:
         template = "blocks/stream_block.html"
         block_counts = {
-            'paragraph': {'min_num': 1, 'max_num': 1}
+            'paragraph': {'max_num': 1}
         }
 
 

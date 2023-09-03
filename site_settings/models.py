@@ -1,9 +1,12 @@
 from django.db import models
 
 # Create your models here.
-from wagtail.admin.panels import FieldPanel, MultiFieldPanel
+from wagtail.admin.panels import FieldPanel, MultiFieldPanel, InlinePanel
 from wagtail.contrib.settings.models import BaseSiteSetting, register_setting
 from wagtail.fields import RichTextField, StreamField
+from wagtail.models import Orderable
+
+from modelcluster.fields import ParentalKey
 
 from home.blocks import HeaderLinkBlock
 
@@ -31,6 +34,15 @@ class SocialMediaSettings(BaseSiteSetting):
     class Meta:
         verbose_name = 'Social Media Channel'
 
+"""
+class HeaderLinks(Orderable):
+    page = ParentalKey("site_settings.SiteSettings", related_name="header_links")
+    link = models.TextField(blank=True, null=True)
+
+    panels = [
+        FieldPanel("link"),
+    ]
+"""
 
 @register_setting
 class SiteSettings(BaseSiteSetting):
@@ -98,10 +110,10 @@ class SiteSettings(BaseSiteSetting):
         MultiFieldPanel([
             FieldPanel('links'),
             ], heading='Add links'),
-        
+
+        #InlinePanel("header_links", label="Header Links"),
 
         ]
 
     class Meta:
         verbose_name = 'Site Setting'
-        verbose_name_plural = 'Site Settings'

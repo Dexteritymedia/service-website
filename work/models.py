@@ -57,9 +57,11 @@ class WorkPage(RoutablePageMixin, Page):
 
     def get_context(self, request):
         context = super().get_context(request)
-        author_works = WorkPage.objects.filter(owner=self.owner).live().public().order_by('-first_published_at')[:4]
+        author_details = WorkPage.objects.get(id=self.id)
+        author_works = WorkPage.objects.filter(owner=self.owner).live().public().order_by('-first_published_at').exclude(pk=self.pk)[:4]
 
         context['author_works'] = author_works
+        context['author_details'] = author_details
         return context
 
     @path('author/')

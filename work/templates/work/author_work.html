@@ -3,32 +3,53 @@
 
 {% block content %}
 
-<div class="container">
-    <div class="section-title text-center">
-        <h1 class="display-5 mb-5">Works by {{all_works.owner.first_name}}</h1>
-    </div>
-</div>
+<div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container py-5">
+			<div class="row">
+			<h1 class="mb-5">Welcome to {{author_details.owner.first_name|title}} work page</h2>
+				{% if author_details.owner.wagtail_userprofile.avatar %}
+				<div class="col-md-4 text-center">
+                    <img class="img-fluid bg-light p-2 mx-auto mb-3" src="{{ author_details.owner.wagtail_userprofile.avatar.url }}" style="width: 100px; alt="{{ author_details.owner.get_full_name }}" height: 100px;">
+				</div>
+				{% else %}
+				<div class="col-md-4 text-center">
+					<i class="fa fa-user fa-5x"></i>
+				</div>
+				{% endif %}
+				<div class="col-md-8 text-center">
+					<h5 class="mb-1">{{author_details.owner.last_name|title}} {{author_details.owner.first_name|title}}</h5>
+                        <p>Date Joined: {{ author_details.owner.profile.date_joined }}</p>
+                        <span class="fst-italic">{{ author_details.user.bio }}</span>
+				</div>
+			
+			
+            <div class="section-title text-center">
+                <h1 class="display-5 mb-5">Works by {{author_details.owner.first_name|title}}</h1>
+            </div>
 
 {% for work in all_works %}
 	<div class="col-md-6 col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
-                    <div class="service-item">
-					{% for block in work.images %}
-						{% if block.block_type == 'photos' %}
-							{% image block.value.images.0 original as photo %}
+					
+                        <div class="p-4 text-center border border-5 border-light border-top-0">
+                            <h4 class="mb-3">{{ work.title|title }}</h4>
+							{% for item in work.body %}
+							{% if item.block_type == 'paragraph' %}
+								<div class="mb-4 pb-2">{{item.value|richtext|safe|truncatewords:30}}</div>
+							{% endif %}
+							{% if item.block_type == 'wide_image' %}
+							{% image item.value.image.0 original as photo %}
 							<div class="overflow-hidden">
 								<img class="img-fluid" src="{{ photo.url }}" alt="{{ photo.alt }}">
 							</div>
-						{% endif %}
-					
-					{% endfor %}
-                        <div class="p-4 text-center border border-5 border-light border-top-0">
-                            <h4 class="mb-3">{{ work.service_title }}</h4>
-                            <p>{{ work.description|richtext|safe|truncatewords:25 }}</p>
+							{% endif %}
+						{% endfor %}
                             <a class="fw-medium" href="{{ work.url }}">Find Out<i class="fa fa-arrow-right ms-2"></i></a>
                         </div>
-                    </div>
                 </div>
 {% endfor %}
+</div>
+</div>
+</div>
 
 
 {% endblock content %}

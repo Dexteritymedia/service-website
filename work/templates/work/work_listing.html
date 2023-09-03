@@ -29,29 +29,39 @@
             <div class="section-title text-center">
                 <h1 class="display-5 mb-5">Our {{ page.title|title }}s</h1>
             </div>
+			
             <div class="row g-4">
                {% for service in works %}
-	<div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
+				<div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="service-item">
-					{% for block in service.images %}
-						{% if block.block_type == 'photos' %}
-							{% image block.value.images.0 original as photo %}
-							<div class="overflow-hidden">
-								<img class="img-fluid" src="{{ photo.url }}" alt="{{ photo.alt }}">
-							</div>
-						{% endif %}
-					
-					{% endfor %}
+
                         <div class="p-4 text-center border border-5 border-light border-top-0">
-                            <h4 class="mb-3">{{ service.service_title }}</h4>
-                            <p>{{ service.description|richtext|safe|truncatewords:25 }}</p>
-							<p>Made by: {{ service.owner|title }}</p>
+                            <h4 class="mb-3">{{ service.title|title }}</h4>
+							{% for item in service.body %}
+								{% if item.block_type == 'paragraph' %}
+									<div class="mb-4 pb-2">{{item.value|richtext|safe|truncatewords:30}}</div>
+								{% endif %}
+								{% if item.block_type == 'wide_image' %}
+									{% image item.value.image.0 original as photo %}
+									<div class="overflow-hidden">
+										<img class="img-fluid" src="{{ photo.url }}" alt="{{ photo.alt }}">
+									</div>
+								{% endif %}
+							{% endfor %}
+							<p>Made by: 
+							{% if service.owner.wagtail_userprofile.avatar %}
+								<img class="img-fluid bg-light p-2 mx-auto mb-3" src="{{ service.owner.wagtail_userprofile.avatar.url }}" alt="{{ service.owner.get_full_name }}" style="width: 50px; height: 50px;">
+							{% else %}
+								<i class="fa fa-user"></i>
+							{% endif %}
+							{{ service.owner|title }}
+							</p>
                             <a class="fw-medium" href="{{ service.url }}">Find Out<i class="fa fa-arrow-right ms-2"></i></a>
                         </div>
                     </div>
                 </div>
-{% endfor %}
-</div> 
+			{% endfor %}
+		</div> 
 
 
 {% if works.paginator.num_pages > 1 %}

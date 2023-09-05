@@ -1,0 +1,24 @@
+{% extends "main.html" %}
+
+{% load wagtailcore_tags crispy_forms_tags %}
+
+{% block content %}
+
+ <div class="container-fluid bg-light p-0 mb-4">
+        <div class="row gx-0">
+            <div class="col-12 mt-5 p-5 text-center">
+
+				{{ self.text|safe }}
+
+				<form action="{% pageurl self %}" method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+					{{ form|crispy }}
+					<div class="col-12 mt-3">
+                        <button class="btn btn-primary w-50 py-3" type="submit">Submit</button>
+                    </div>
+				</form>
+			</div>
+		</div>
+</div>
+
+{% endblock content %}

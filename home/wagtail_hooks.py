@@ -60,7 +60,7 @@ class ServicePageAdmin(ModelAdmin):
 
 class FormPageAdmin(ModelAdmin):
     model = FormPage
-    menu_label = 'Testimonial & Contact'
+    menu_label = 'Registration & Contact'
     menu_icon = 'list-ul'
     menu_order = 150
     add_to_settings_menu = False

@@ -1,8 +1,14 @@
+import json
+from os.path import splitext
+
 from django.db import models
 from django.utils import timezone
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django import forms
+from django.core.serializers.json import DjangoJSONEncoder
+from django.utils.html import format_html
+from django.urls import reverse
 
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 
@@ -12,7 +18,13 @@ from wagtail.images.blocks import ImageChooserBlock
 from wagtail.admin.panels import (
     FieldPanel, InlinePanel, MultiFieldPanel, FieldRowPanel, PageChooserPanel )
 from wagtail.search import index
-from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField
+from wagtail.contrib.forms.models import AbstractEmailForm, AbstractFormField, FORM_FIELD_CHOICES
+from wagtail.models import Collection
+from wagtail.contrib.forms.forms import FormBuilder
+from wagtail.contrib.forms.views import SubmissionsListView
+from wagtail.images import get_image_model
+from wagtail.images.fields import WagtailImageField
+from wagtail.contrib.forms.panels import FormSubmissionsPanel
 
 from .blocks import *
 
@@ -190,14 +202,64 @@ class StaticPage(Page):
 
         context['service'] = service
         return context
+
+
+class CustomFormBuilder(FormBuilder):
+
+    def create_image_field(self, field, options):
+        return WagtailImageField(**options)
+
+
+class CustomSubmissionsListView(SubmissionsListView):
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if not self.is_export:
+
+            # generate a list of field types, the first being the injected 'submission date'
+            field_types = ['submission_date'] + [field.field_type for field in self.form_page.get_form_fields()]
+            data_rows = context['data_rows']
+            ImageModel = get_image_model()
+
+            for data_row in data_rows:
+
+                fields = data_row['fields']
+
+                for idx, (value, field_type) in enumerate(zip(fields, field_types)):
+                    if field_type == 'image' and value:
+                        image = ImageModel.objects.get(pk=value)
+                        rendition = image.get_rendition('fill-100x75|jpegquality-40')
+                        preview_url = rendition.url
+                        url = reverse('wagtailimages:edit', args=(image.id,))
+                        # build up a link to the image, using the image title & id
+                        fields[idx] = format_html(
+                            "<a href='{}'><img alt='Uploaded image - {}' src='{}' />{} ({})</a>",
+                            url,
+                            image.title,
+                            preview_url,
+                            image.title,
+                            value
+                        )
+
+        return context
     
 
 class FormField(AbstractFormField):
+    field_type = models.CharField(
+        verbose_name='field type',
+        max_length=16,
+        choices=list(FORM_FIELD_CHOICES) + [('image', 'Upload Image')]
+    )
+    
     page = ParentalKey('FormPage', related_name='form_fields', on_delete=models.CASCADE)
 
 class FormPage(AbstractEmailForm):
 
     template = 'contact_page.html'
+
+    form_builder = CustomFormBuilder
+    submissions_list_view_class = CustomSubmissionsListView
 
     subpage_types = [
         #app_name.model,
@@ -210,20 +272,28 @@ class FormPage(AbstractEmailForm):
     
     max_count = 2
     
-    intro = RichTextField(blank=True)
+    text = RichTextField(blank=True)
     thank_you_text = RichTextField(blank=True)
     use_other_template = models.BooleanField(null=True, blank=True, default='No', verbose_name='New Template', help_text='Use a different template',)
+    uploaded_image_collection = models.ForeignKey(
+        'wagtailcore.Collection',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
 
     def get_template(self, request, *args, **kwargs):
         if self.use_other_template:
-            return 'testimonial_page.html'
+            return 'registration_page.html'
         return 'contact_page.html'
 
 
     content_panels = AbstractEmailForm.content_panels + [
+        FormSubmissionsPanel(),
+        FieldPanel('text', classname='full'),
         FieldPanel('use_other_template'),
+        FieldPanel('uploaded_image_collection'),
         InlinePanel('form_fields', label='Form Fields'),
-        FieldPanel('intro', classname='full'),
         FieldPanel('thank_you_text', classname='full'),
     ]
 
@@ -233,5 +303,72 @@ class FormPage(AbstractEmailForm):
 
         context['testimonials'] = testimonials
         return context
+
+
+    def get_uploaded_image_collection(self):
+        """
+        Returns a Wagtail Collection, using this form's saved value if present,
+        otherwise returns the 'Root' Collection.
+        """
+        collection = self.uploaded_image_collection
+
+        return collection or Collection.get_first_root_node()
+
+    @staticmethod
+    def get_image_title(filename):
+        """
+        Generates a usable title from the filename of an image upload.
+        Note: The filename will be provided as a 'path/to/file.jpg'
+        """
+
+        if filename:
+            result = splitext(filename)[0]
+            result = result.replace('-', ' ').replace('_', ' ')
+            return result.title()
+        return ''
+
+    def process_form_submission(self, form):
+        """
+        Processes the form submission, if an Image upload is found, pull out the
+        files data, create an actual Wgtail Image and reference its ID only in the
+        stored form response.
+        """
+
+        cleaned_data = form.cleaned_data
+
+        for name, field in form.fields.items():
+            if isinstance(field, WagtailImageField):
+                image_file_data = cleaned_data[name]
+                if image_file_data:
+                    ImageModel = get_image_model()
+
+                    kwargs = {
+                        'file': cleaned_data[name],
+                        'title': self.get_image_title(cleaned_data[name].name),
+                        'collection': self.get_uploaded_image_collection(),
+                    }
+
+                    if form.user and not form.user.is_anonymous:
+                        kwargs['uploaded_by_user'] = form.user
+
+                    image = ImageModel(**kwargs)
+                    image.save()
+                    # saving the image id
+                    # alternatively we can store a path to the image via image.get_rendition
+                    cleaned_data.update({name: image.pk})
+                else:
+                    # remove the value from the data
+                    del cleaned_data[name]
+
+        submission = self.get_submission_class().objects.create(
+            form_data=json.dumps(form.cleaned_data, cls=DjangoJSONEncoder),
+            page=self,
+        )
+
+        # important: if extending AbstractEmailForm, email logic must be re-added here
+        # if self.to_address:
+        #    self.send_mail(form)
+
+        return submission
 
 

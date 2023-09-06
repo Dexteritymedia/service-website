@@ -9,7 +9,7 @@
 			<h1 class="mb-5">Welcome to {{author_details.owner.first_name|title}} work page</h2>
 				{% if author_details.owner.wagtail_userprofile.avatar %}
 				<div class="col-md-4 text-center">
-                    <img class="img-fluid bg-light p-2 mx-auto mb-3" src="{{ author_details.owner.wagtail_userprofile.avatar.url }}" style="width: 100px; alt="{{ author_details.owner.get_full_name }}" height: 100px;">
+                    <img class="img-fluid bg-light p-2 mx-auto mb-3" src="{{ author_details.owner.wagtail_userprofile.avatar.url }}" style="border-radius: 50%; width: 100px; height: 100px;" alt="{{ author_details.owner.get_full_name }}">
 				</div>
 				{% else %}
 				<div class="col-md-4 text-center">

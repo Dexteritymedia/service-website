@@ -1,0 +1,23 @@
+{% extends "main.html" %}
+
+{% load crispy_forms_tags crispy_forms_filters %}
+
+{% block title %} Review Page {% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12 mt-5">
+
+			<h1 class="mt-5">Please leave a review we appreciate it</h1>
+			<form class="" action="" method='post' enctype="multipart/form-data">
+				{% csrf_token %}
+					{{ form| crispy }}
+				<div class="col-12 mt-3">
+					<button class="btn btn-primary w-50 py-3" type="submit">Submit</button>
+				</div>
+		   </form>
+     </div>
+</div>
+</div>
+{% endblock content %}

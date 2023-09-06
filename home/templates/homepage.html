@@ -1,6 +1,6 @@
 {% extends "main.html" %}
 
-{% load wagtailcore_tags wagtailimages_tags get_service %}
+{% load wagtailcore_tags wagtailimages_tags get_service get_reviews %}
 
 
 {% block content %}
@@ -10,5 +10,7 @@
 {% endfor %}
 
 {% get_service %}
+
+{% get_the_latest_five_reviews %}
 
 {% endblock content %}

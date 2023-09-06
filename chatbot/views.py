@@ -5,7 +5,7 @@ from django.shortcuts import render
 from wagtail.models import Page
 
 from .models import Message
-#from .utils import *
+from .utils import *
 
 def chatbot(request):
     if request.method == 'POST':

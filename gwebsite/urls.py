@@ -8,6 +8,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 
 from search import views as search_views
 from chatbot import views as chatbot_views
+from feedback import views as feedback_views
 
 urlpatterns = [
     path("django-admin/", admin.site.urls),
@@ -16,6 +17,7 @@ urlpatterns = [
     path("search/", search_views.search, name="search"),
     path("chatbot/", chatbot_views.chat_view, name="chat_view"),
     path("chat/", chatbot_views.chatbot, name="chatbot"),
+    path("submit-review/", feedback_views.submit_review, name="submit_review"),
 ]
 
 

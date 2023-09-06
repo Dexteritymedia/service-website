@@ -1,0 +1,49 @@
+<!-- Testimonial Start -->
+    <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container">
+		{% if reviews %}
+            <div class="section-title text-center">
+                <h1 class="display-5 mb-5">Testimonial</h1>
+            </div>
+		{% endif %}
+            <div class="owl-carousel testimonial-carousel">
+			{% for review in reviews %}
+                <div class="testimonial-item text-center">
+					{% if review.picture %}
+                    <img class="img-fluid bg-light p-2 mx-auto mb-3" src="{{ review.picture.url }}" style="width: 90px; height: 90px;">
+					{% else %}
+					<img class="img-fluid bg-light p-2 mx-auto mb-3" src="" style="width: 90px; height: 90px;">
+					{% endif %}
+                    <div class="testimonial-text text-center p-4">
+					{% if review.ratings == "1" %}
+						<i class="fa fa-star fa-2x" style="color: #ffdf00;"></i>
+					{% elif review.ratings == "2" %}
+						<i class="fa fa-star fa-2x" style="color: #ffdf00;"></i>
+						<i class="fa fa-star fa-2x" style="color: #ffdf00;"></i>
+					{% elif review.ratings == "3" %}
+						<i class="fa fa-star fa-2x" style="color: #ffdf00;"></i>
+						<i class="fa fa-star fa-2x" style="color: #ffdf00;"></i>
+						<i class="fa fa-star fa-2x" style="color: #ffdf00;"></i>
+					{% elif review.ratings == "4" %}
+						<i class="fa fa-star fa-2x" style="color: #ffdf00;"></i>
+						<i class="fa fa-star fa-2x" style="color: #ffdf00;"></i>
+						<i class="fa fa-star fa-2x" style="color: #ffdf00;"></i>
+						<i class="fa fa-star fa-2x" style="color: #ffdf00;"></i>
+					{% elif review.ratings == "5" %}
+						<i class="fa fa-star fa-2x" style="color: #ffdf00;"></i>
+						<i class="fa fa-star fa-2x" style="color: #ffdf00;"></i>
+						<i class="fa fa-star fa-2x" style="color: #ffdf00;"></i>
+						<i class="fa fa-star fa-2x" style="color: #ffdf00;"></i>
+						<i class="fa fa-star fa-2x" style="color: #ffdf00;"></i>
+					{% endif %}
+					
+                        <p>{{ review.message }}</p>
+                        <h5 class="mb-1">{{ review.name|title }}</h5>
+						{{ review.date_submitted }}
+                    </div>
+                </div>
+			{% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- Testimonial End -->

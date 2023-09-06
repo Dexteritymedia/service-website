@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "chatbot",
     "work",
     "partners",
+    "feedback",
     "site_settings",
     "search",
     "wagtailmenus",
@@ -208,3 +209,5 @@ WAGTAIL_ENABLE_WHATS_NEW_BANNER = False
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+OPENAI_API_KEY = env('OPENAI_API_KEY')

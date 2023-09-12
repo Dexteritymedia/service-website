@@ -16,6 +16,7 @@ from wagtail.fields import RichTextField, StreamField
 from wagtail.models import Orderable, Page
 from wagtail.signals import page_published
 from wagtail.contrib.routable_page.models import RoutablePageMixin, path
+from wagtail.users.models import UserProfile
 
 from home.blocks import *
 
@@ -59,9 +60,12 @@ class WorkPage(RoutablePageMixin, Page):
         context = super().get_context(request)
         author_details = WorkPage.objects.get(id=self.id)
         author_works = WorkPage.objects.filter(owner=self.owner).live().public().order_by('-first_published_at').exclude(pk=self.pk)[:4]
+        author_page = UserProfile.objects.get(user=self.owner)
+        print(author_page)
 
         context['author_works'] = author_works
         context['author_details'] = author_details
+        context['author_page'] = author_page
         return context
 
     @path('author/')

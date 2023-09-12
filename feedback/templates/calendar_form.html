@@ -1,0 +1,35 @@
+{% extends "wagtailadmin/base.html" %}
+{% load wagtailadmin_tags i18n static %}
+{% block titletag %} Search Calendar: {{ current_year }} {% endblock titletag %}
+
+{% block extra_css %}
+	{{ block.super }}
+	<style>
+		table.month {
+			margin: 20px;
+		}
+		table.month td, table.month th {
+			padding: 5px;
+		}
+	
+	</style>
+{% endblock %}
+
+{% block content %}
+{% include "wagtailadmin/shared/header.html" with title="Search Calendar" icon="date" %}
+<div class="nice-padding">
+	<form class="" action="" method='post'>
+				{% csrf_token %}
+					{{ form }}
+				<div class="col-12 mt-3">
+					<button class="btn btn-primary py-3" type="submit">Search</button>
+				</div>
+	</form>
+	{% if calendar_month_html %}
+		{{ calendar_month_html|safe }}
+	<hr/>
+	{% endif %}
+	{{ calendar_html|safe }}
+</div>
+
+{% endblock content %}

@@ -1,26 +1,48 @@
 {% extends "wagtailadmin/base.html" %}
 {% load wagtailadmin_tags i18n static %}
 
+{% block titletag %}
+Reviews
+{% endblock %}
+
 {% block extra_css %}
 	{{ block.super }}
 	<style>
+		th, td {
+			padding: 12px;
+			text-align: left;
+		}
 	
 	</style>
 {% endblock %}
 
 {% block content %}
 {% include "wagtailadmin/shared/header.html" with title="Customers Reviews" icon="date" %}
-<div class="container">
+<div class="nice-padding">
 	<div class="row">
 		<div class="col-12">
-		<h1>Name Message Ratings Date</h2>
+		<table>
+			<tr>
+				<th>Name</th>
+				<th>Message</th>
+				<th>Ratings</th>
+				<th>Date</th>
+				<th>Picture</th>
+			</tr>
 			{% for review in reviews %}
-				{{ review.name|title }}
-				{{ review.message }}
-				{{ review.ratings }}
-				{{ review.date_submitted }}
-				<hr/>
+			<tr>
+				<td>{{ review.name|title }}</td>
+				<td>{{ review.message|truncatewords:15|safe }}</td>
+				<td>{{ review.ratings }}</td>
+				<td>{{ review.date_submitted }}</td>
+				{% if review.picture %}
+				<td>
+				<img style="max-width: 75px; max-height: 75px;" src="{{ review.picture.url }}">
+				</td>
+				{% endif %}
+			</tr>
 			{% endfor %}
+		</table>
 		</div>
 	</div>
 </div>

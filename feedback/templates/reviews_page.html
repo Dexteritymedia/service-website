@@ -37,7 +37,7 @@
 						<i class="fa fa-star fa-2x" style="color: #ffdf00;"></i>
 					{% endif %}
 					
-                        <p>{{ review.message }}</p>
+                        <p>{{ review.message|safe }}</p>
                         <h5 class="mb-1">{{ review.name|title }}</h5>
 						{{ review.date_submitted }}
                     </div>

@@ -3,17 +3,32 @@ import requests
 from django.shortcuts import render
 
 from wagtail.models import Page
+from wagtail.admin.viewsets.model import ModelViewSet
 
 from .models import Message
-from .utils import *
+#from .utils import *
 
 def chatbot(request):
     if request.method == 'POST':
         message = request.POST.get('message')
         response = generate_answers(message)
-
+        Message.objects.create(user_message=message, bot_message=response)
         return JsonResponse({'message': message, 'response': response})
     return render(request, 'chat.html',)
+
+
+class ChatBotViewSet(ModelViewSet):
+    model = Message
+    form_fields = []
+    list_per_page = 2
+    icon = "user"
+    add_to_admin_menu = True
+    menu_label = "Chatbot messages"
+    order = 20
+    list_display = ['message','response','timestamp']
+
+chatbot_viewset = ChatBotViewSet("chatbot")
+
 
 def chat_view(request):
     if request.method == "POST":

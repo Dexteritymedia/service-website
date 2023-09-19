@@ -2,11 +2,13 @@
 {% for item in menu_items %}
 	<a class="btn btn-link" href="{{ item.href }}">{{ item.text }}</a>
 			{% if item.sub_menu %}
+			<div class="nav-item dropdown">
+				<a href="{{ item.href }}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">{{ item.text|title }}</a>
 					<div class="dropdown-menu fade-up m-0">
 						{% for sub_item in item.sub_menu.items %}
 						 <a href="{{ sub_item.href }}" class="dropdown-item {{ sub_item.active_class }}">{{ sub_menu.text }}</a>
 						 {% endfor %}
 					</div>
-				{% endif %}
-            </a>
-			{% endfor %}
+			</div>
+			{% endif %}
+{% endfor %}

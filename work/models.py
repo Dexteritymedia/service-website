@@ -5,7 +5,7 @@ from django import forms
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
 from django.dispatch import receiver
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
 
 from bs4 import BeautifulSoup
@@ -67,7 +67,25 @@ class WorkPage(RoutablePageMixin, Page):
         context['author_details'] = author_details
         context['author_page'] = author_page
         return context
+    """
+    @path('author/<int:author_id>/')
+    def author_works(self, request, author_id, *args, **kwargs):
+        context = super(WorkPage, self).get_context(request, *args, **kwargs)
+        #author = WorkPage.objects.get(id=author_id)
+        author = get_object_or_404(WorkPage, id=author_id)
+        #print(author)
+        print(author.owner)
+        all_works = WorkPage.objects.filter(owner=self.owner).live().public().order_by('-first_published_at')
+        return self.render(
+            request,
+            context_overrides={
+                'author': author,
+                'all_works': all_works,
+            },
+            template = 'work/author_work.html',
+        )
 
+    """
     @path('author/')
     def author_works(self, request,):
         all_works = WorkPage.objects.filter(owner=self.owner).live().public().order_by('-first_published_at')
@@ -78,7 +96,7 @@ class WorkPage(RoutablePageMixin, Page):
             },
             template = 'work/author_work.html',
         )
-
+    
 
     @property
     def related_works(self):

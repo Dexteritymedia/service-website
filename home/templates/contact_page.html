@@ -11,7 +11,7 @@
                     <div class="p-lg-5 ps-lg-0">
                         <div class="section-title text-start">
                             <h1 class="display-5 mb-4">{{ page.title|title }}</h1>
-							{% if page.intro %}<p> {{ page.intro|richtext }}</p>{% endif %}
+							{% if page.text %}<p> {{ page.text|richtext }}</p>{% endif %}
                         </div>
 						
 							<form action="{% pageurl self %}" method="POST" enctype="multipart/form-data">

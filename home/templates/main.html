@@ -22,6 +22,11 @@
 	{% endif %}
 	{% endblock meta_description %}
 	
+	{% if settings.site_settings.SiteSettings.site_logo %}
+		{% image settings.site_settings.SiteSettings.site_logo max-30x30 as icon_image %}
+		<link rel="shortcut icon" href="{{ icon_image.url }}" />
+	{% endif %}
+	
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,12 +54,8 @@
 	</style>
 	
 	<!-- Other links -->
-	{{ settings.site_settings.SiteSettings.links }}
-	
-	<!-- Favicon -->
-	{% if settings.site_settings.SiteSettings.site_logo %}
-		{% image settings.site_settings.SiteSettings.site_logo max-30x30 as icon_image %}
-		<link rel="shortcut icon" href="{{ icon_image.url }}" />
+	{% if settings.site_settings.SiteSettings.header_links %}
+	{{ settings.site_settings.SiteSettings.header_links|safe }}
 	{% endif %}
 	
 </head>
@@ -94,10 +95,10 @@
                 </div>
 				{% endif %}
                 <div class="h-100 d-inline-flex align-items-center">
-                    {% if settings.site_settings.SocialMediaSettings.facebook  %}<a class="btn btn-sm-square bg-white text-primary me-1" href="{{ settings.site_settings.SocialMediaSettings.facebook  }}"><i class="fab fa-facebook-f"></i></a>{% endif %}
-                    {% if settings.site_settings.SocialMediaSettings.twitter  %}<a class="btn btn-sm-square bg-white text-primary me-1" href="{{ settings.site_settings.SocialMediaSettings.twitter  }}"><i class="fab fa-twitter"></i></a>{% endif %}
-                    {% if settings.site_settings.SocialMediaSettings.linkedin  %}<a class="btn btn-sm-square bg-white text-primary me-1" href="{{ settings.site_settings.SocialMediaSettings.linkedin  }}"><i class="fab fa-linkedin-in"></i></a>{% endif %}
-                    {% if settings.site_settings.SocialMediaSettings.instagram  %}<a class="btn btn-sm-square bg-white text-primary me-0" href="{{ settings.site_settings.SocialMediaSettings.instagram  }}"><i class="fab fa-instagram"></i></a>{% endif %}
+                    {% if settings.site_settings.SocialMediaSettings.facebook  %}<a class="btn btn-sm-square bg-white text-primary me-1" href="www.facebook.com/{{ settings.site_settings.SocialMediaSettings.facebook  }}"><i class="fab fa-facebook-f"></i></a>{% endif %}
+                    {% if settings.site_settings.SocialMediaSettings.twitter  %}<a class="btn btn-sm-square bg-white text-primary me-1" href="www.twitter.com/{{ settings.site_settings.SocialMediaSettings.twitter  }}"><i class="fab fa-twitter"></i></a>{% endif %}
+                    {% if settings.site_settings.SocialMediaSettings.linkedin  %}<a class="btn btn-sm-square bg-white text-primary me-1" href="www.linkedin.com/{{ settings.site_settings.SocialMediaSettings.linkedin  }}"><i class="fab fa-linkedin-in"></i></a>{% endif %}
+                    {% if settings.site_settings.SocialMediaSettings.instagram  %}<a class="btn btn-sm-square bg-white text-primary me-0" href="www.instagram.com/{{ settings.site_settings.SocialMediaSettings.instagram  }}"><i class="fab fa-instagram"></i></a>{% endif %}
                 </div>
             </div>
         </div>
@@ -135,7 +136,7 @@
         <div class="container py-5">
             <div class="row g-5">
 				{% if settings.site_settings.SiteSettings.shop_address %}
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-6 col-sm-12 col-md-6">
                     <h4 class="text-light mb-4">Address</h4>
                     <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>{{ settings.site_settings.SiteSettings.shop_address }}</p>
 				{% endif %}
@@ -143,23 +144,23 @@
                     {% if settings.site_settings.SiteSettings.email %}<p class="mb-2"><i class="fa fa-envelope me-3"></i>{{ settings.site_settings.SiteSettings.email }}</p>{% endif %}
                     <div class="d-flex pt-2">
 						{% if settings.site_settings.SocialMediaSettings.twitter  %}
-                        <a class="btn btn-outline-light btn-social" href="{{ settings.site_settings.SocialMediaSettings.twitter }}"><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="www.twitter.com/{{ settings.site_settings.SocialMediaSettings.twitter }}"><i class="fab fa-twitter"></i></a>
 						{% endif %}
 						{% if settings.site_settings.SocialMediaSettings.facebook  %}
-                        <a class="btn btn-outline-light btn-social" href="{{ settings.site_settings.SocialMediaSettings.facebook }}"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="www.facebook.com/{{ settings.site_settings.SocialMediaSettings.facebook }}"><i class="fab fa-facebook-f"></i></a>
 						{% endif %}
 						{% if settings.site_settings.SocialMediaSettings.pinterest %}
-                        <a class="btn btn-outline-light btn-social" href="{{ settings.site_settings.SocialMediaSettings.pinterest }}"><i class="fab fa-pinterest"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="www.pinterest.com/{{ settings.site_settings.SocialMediaSettings.pinterest }}"><i class="fab fa-pinterest"></i></a>
 						{% endif %}
 						{% if settings.site_settings.SocialMediaSettings.linkedin  %}
-                        <a class="btn btn-outline-light btn-social" href="{{ settings.site_settings.SocialMediaSettings.linkedin }}"><i class="fab fa-linkedin-in"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="www.linkedin.com/{{ settings.site_settings.SocialMediaSettings.linkedin }}"><i class="fab fa-linkedin-in"></i></a>
 						{% endif %}
                     </div>
                 </div>
-				<div class="col-lg-4 col-md-6">
+				<div class="col-lg-3 col-6 col-md-6">
 				{% flat_menu template="menu/flat_menu.html" handle="footer" %}
 				</div>
-				<div class="col-lg-4 col-md-6">
+				<div class="col-lg-3 col-6 col-md-6">
 				{% flat_menu template="menu/flat_menu.html" handle="services" %}
 				</div>
             </div>

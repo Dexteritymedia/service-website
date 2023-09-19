@@ -273,8 +273,8 @@ class FormPage(AbstractEmailForm):
     max_count = 2
     
     text = RichTextField(blank=True)
-    thank_you_text = RichTextField(blank=True)
-    use_other_template = models.BooleanField(null=True, blank=True, default='No', verbose_name='New Template', help_text='Use a different template',)
+    landing_page_text = RichTextField(blank=True)
+    use_other_template = models.BooleanField(default=False, blank=True, verbose_name='New Page Template', help_text='Use a different template',)
     uploaded_image_collection = models.ForeignKey(
         'wagtailcore.Collection',
         null=True,
@@ -294,7 +294,7 @@ class FormPage(AbstractEmailForm):
         FieldPanel('use_other_template'),
         FieldPanel('uploaded_image_collection'),
         InlinePanel('form_fields', label='Form Fields'),
-        FieldPanel('thank_you_text', classname='full'),
+        FieldPanel('landing_page_text', classname='full'),
     ]
 
     def get_context(self, request):
@@ -370,5 +370,4 @@ class FormPage(AbstractEmailForm):
         #    self.send_mail(form)
 
         return submission
-
 

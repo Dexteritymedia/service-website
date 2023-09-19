@@ -12,12 +12,12 @@ from home.blocks import HeaderLinkBlock
 
 @register_setting
 class SocialMediaSettings(BaseSiteSetting):
-    instagram = models.URLField(max_length=100, default='www.instagram.com/', null=True, blank=True, help_text='Instagram URL')
-    facebook = models.URLField(max_length=100, default='www.facebook.com/', null=True, blank=True, help_text='Facebook URL')
-    twitter = models.URLField(max_length=100, default='www.twitter.com/', null=True, blank=True, help_text='Twitter URL')
-    pinterest = models.URLField(max_length=100, default='www.pinterest.com/', null=True, blank=True, help_text='Pinterest URL')
-    linkedin = models.URLField(max_length=100, default='www.linkedin.com/', null=True, blank=True, help_text='Linkedin URL')
-    whatsapp = models.CharField(max_length=100, default='Enter your WhatsApp number', null=True, blank=True, help_text='Whatsapp Number')
+    instagram = models.URLField(max_length=100, default='@genius', null=True, blank=True, help_text='Enter your instagram username')
+    facebook = models.URLField(max_length=100, default='Genius multi-concept', null=True, blank=True, help_text='Enter your facebook ID or name')
+    twitter = models.URLField(max_length=100, default='@genius', null=True, blank=True, help_text='Enter your twitter username')
+    pinterest = models.URLField(max_length=100, default='@genius', null=True, blank=True, help_text='pinterest username')
+    linkedin = models.URLField(max_length=100, default='@genius', null=True, blank=True, help_text='Your linkedin username')
+    whatsapp = models.CharField(max_length=100, default='Enter your WhatsApp number', null=True, blank=True, help_text='Your whatsapp number')
     
     panels = [
         MultiFieldPanel([
@@ -67,18 +67,8 @@ class SiteSettings(BaseSiteSetting):
     time_and_date = RichTextField(verbose_name='Time and Day', blank=True,)
     phone_no = models.CharField(blank=True, verbose_name='Phone number', help_text='Your office phone number', max_length=250)
     email = models.EmailField(blank=True, verbose_name='Email', help_text='Enter your email address', max_length=250)
+    header_links = models.TextField(blank=True, verbose_name='Links', help_text="Use this to add links, scripts such as google analytics to the head section of the website")
 
-
-    links = StreamField(
-        [
-            ('link', HeaderLinkBlock()),
-        ],
-
-        blank=True,
-        use_json_field=True,
-        null=True
-
-    )
     
     panels = [
         MultiFieldPanel([
@@ -108,7 +98,7 @@ class SiteSettings(BaseSiteSetting):
             ], heading='Settings for Google Map'),
 
         MultiFieldPanel([
-            FieldPanel('links'),
+            FieldPanel('header_links'),
             ], heading='Add links'),
 
         #InlinePanel("header_links", label="Header Links"),

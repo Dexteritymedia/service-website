@@ -18,6 +18,7 @@ from wagtail.blocks import (
     ChoiceBlock,
     TextBlock,
     ChooserBlock,
+    IntegerBlock,
 )
 from wagtail.blocks.struct_block import StructBlockValidationError
 from wagtail.embeds.blocks import EmbedBlock
@@ -76,7 +77,7 @@ class AboutUsBlock(StructBlock):
         StructBlock(
             [
                 ('description', CharBlock(required=False, max_length=40)),
-                ('completed_projects', CharBlock(required=False, help_text="Enter a Number", max_length=40)),
+                ('number', IntegerBlock(required=False, help_text="Enter a Number", max_length=40)),
             ]
         )
     )

@@ -42,7 +42,7 @@
 									<div class="mb-4 pb-2">{{item.value|richtext|safe|truncatewords:30}}</div>
 								{% endif %}
 								{% if item.block_type == 'wide_image' %}
-									{% image item.value.image.0 original as photo %}
+									{% image item.value.image original as photo %}
 									<div class="overflow-hidden">
 										<img class="img-fluid" src="{{ photo.url }}" alt="{{ photo.alt }}">
 									</div>
